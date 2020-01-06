@@ -1,6 +1,31 @@
 #include <stdlib.h>
 #include <iostream>
 #include "../include/connectionHandler.h"
+#include <thread>
+#include <mutex>
+
+using namespace std;
+
+class ReadFromKeyboard{   //will used by thread1
+private:
+    mutex & _mutex;
+    ConnectionHandler & _connectionHandler;
+public:
+    ReadFromKeyboard(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
+    void run(){  //todo
+
+    }
+};
+class ReadFromSocket{    //will used by thread2
+private:
+    mutex & _mutex;
+    ConnectionHandler & _connectionHandler;
+public:
+    ReadFromSocket(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
+    void run(){  //todo
+
+    }
+};
 
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
@@ -56,5 +81,8 @@ int main (int argc, char *argv[]) {
             break;
         }
     }
+    mutex sharedMutex;
+    ReadFromKeyboard&mutex,connectionHandler); //:todo
+
     return 0;
 }
