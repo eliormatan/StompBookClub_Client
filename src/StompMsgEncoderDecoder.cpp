@@ -14,40 +14,28 @@ StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 }
 
-string StompMsgEncoderDecoder::decodeNextByte(char nextByte) {
-    if (nextByte == '\0') {
-        pushByte(nextByte);
-        return popString();
+string StompMsgEncoderDecoder::splitWords(string line) {
+    vector<string> splitWords(string line){
+        vector <string> words;
+        string word;
+        for(unsigned int i=0;i<line.size();i++){
+            if(line[i] == ' '){
+                words.push_back(word);
+                word = "";
+            }
+            else{
+                word += line[i];
+            }
+        }
+        words.push_back(word);
+        return words;
     }
-    pushByte(nextByte);
-    return nullptr; //not a full object yet
 }
 
-vector<unsigned char> StompMsgEncoderDecoder::encode(string message) {   //todo
-//    string bytes = makeItStomp(message);
-//     bytes.push_back("/n");
-//     bytes.push_back("/0");
-//    return vector<char> bytesToSend(output.begin(),output.end());
-}
-
-void StompMsgEncoderDecoder::pushByte(char byte) {   //todo
-//      if(len >= bytes->size())   {
-//          bytes=Arrays.copyOf(bytes,len*2);
-//      }
-}
-
-string StompMsgEncoderDecoder::popString() {     //todo 
-
-}
-
-vector<unsigned char> StompMsgEncoderDecoder::stringToBytes(string msg) {    //todo
-    return vector<unsigned char>();
-}
-string StompMsgEncoderDecoder::BytesToString(vector<unsigned char> bytes) {           //todo
+string StompMsgEncoderDecoder::decode(string stomp) {
     return std::__cxx11::string();
 }
 
-string StompMsgEncoderDecoder::makeItStomp(string msg) {           //todo
-                                          //a lot of switch case
+string StompMsgEncoderDecoder::encode(string msg) {
     return std::__cxx11::string();
 }

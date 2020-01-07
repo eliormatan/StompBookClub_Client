@@ -14,17 +14,12 @@ class StompMsgEncoderDecoder {//todo
 public:
 StompMsgEncoderDecoder();
 ~StompMsgEncoderDecoder();
-string decodeNextByte(char nextByte);
-vector<unsigned char> encode(string message);
+string decode(string stomp);    //decode stomp frame to string
+string encode(string msg);      //encode string to stomp frame
+string splitWords(string line);
 
 private:
-    vector<unsigned char> bytes[1<<10]; //start with 1k
-    int len = 0;
-    string BytesToString(vector<unsigned char> bytes);
-    vector<unsigned char> stringToBytes(string msg);
-    void pushByte(char byte);
-    string popString();
-    string makeItStomp(string msg);
+
 };
 
 
