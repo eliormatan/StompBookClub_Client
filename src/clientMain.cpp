@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "../include/connectionHandler.h"
+#include "../include/SplitThings.h"
 #include <thread>
 #include <mutex>
 using namespace std;
@@ -12,11 +13,9 @@ int main (int argc, char *argv[]) {
     while(!loggedIN){
         string action,subAction;
         std::getline(std::cin, action);
-        size_t space_pos = action.find(" "); //Find the first Space
-        if (space_pos != std::string::npos) {
-            subAction = action.substr(0, space_pos); //String before space
-            action = action.substr(space_pos + 1); //String after space
-        }
+        vector<string> words;
+        SplitThings::splitWords(action,words);
+        string currWord=words[0];
         if(subAction=="login"){
             loggedIN = true;
             int seperate=words[1].find(':');
@@ -24,20 +23,21 @@ int main (int argc, char *argv[]) {
             string port=words[1].substr(seperate+1,words[1].length()-1);
             string username=words[2];
             string password=words[3];
-            stomp="CONNECT"+string("\n")+
+            string stomp="CONNECT"+string("\n")+
                   "accept-version:1.2"+string("\n")+
                   "host:stomp.cs.bgu.ac.il"+string("\n")+
                   "login:"+username+string("\n")+
                   "passcode:"+password+string("\n")+"\0";
-
+            ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port));
+            );
+            if (!connectionHandler.connect()) {
+                std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
+                return 1;
+            }
         }
 
     }
-    ConnectionHandler connectionHandler(host, port);
-    if (!connectionHandler.connect()) {
-        std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
-        return 1;
-    }
+
     mutex sharedMutex;
     KeyboardTask keyboardTask(sharedMutex,connectionHandler);
     ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);

@@ -3,7 +3,7 @@
 //
 
 #include "../include/SplitThings.h"
-static void splitWords(string line,vector<string>& words) {
+ void SplitThings::splitWords(string line,vector<string>& words) {
     string word;
     for(unsigned int i=0;i<line.size();i++){
         if(line[i] == ' '){
@@ -17,7 +17,7 @@ static void splitWords(string line,vector<string>& words) {
     words.push_back(word);
 }
 
-static vector<string> split_string(const string& str) { //TODO CHECK STRINGS
+ vector<string> SplitThings::split_string(const string& str) { //TODO CHECK STRINGS
     std::vector<std::string> strings;
 
     string::size_type pos = 0;
