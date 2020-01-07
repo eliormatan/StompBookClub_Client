@@ -21,3 +21,7 @@ User::~User() {
 User *User::getInstance() {
     return this;
 }
+
+int User::getRunningID() {
+    return runningID++;
+}
