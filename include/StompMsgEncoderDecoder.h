@@ -15,11 +15,11 @@ public:
 StompMsgEncoderDecoder();
 ~StompMsgEncoderDecoder();
 string decode(string stomp);    //decode stomp frame to string
-string encode(string msg);      //encode string to stomp frame
-string splitWords(string line);
+void encode(string msg,string &stomp);      //encode string to stomp frame
+void splitWords(string line,vector<string> & words);
 
 private:
-
+    User user;
 };
 
 
