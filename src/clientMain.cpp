@@ -5,6 +5,8 @@
 #include <iostream>
 #include "../include/connectionHandler.h"
 #include "../include/SplitThings.h"
+#include "../include/KeyBoardTask.h"
+#include "../include/ReadFromSocketTask.h"
 #include <thread>
 #include <mutex>
 using namespace std;
@@ -29,21 +31,22 @@ int main (int argc, char *argv[]) {
                   "login:"+username+string("\n")+
                   "passcode:"+password+string("\n")+"\0";
             ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port));
-            );
             if (!connectionHandler.connect()) {
                 std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
                 return 1;
             }
+            connectionHandler.sendFrameAscii(stomp,'\0');
+            mutex sharedMutex;
+            User userLogged(username,password);
+            StompMsgEncoderDecoder msgEncoderDecoder(userLogged);
+            KeyBoardTask keyboardTask(sharedMutex,connectionHandler,msgEncoderDecoder);
+            ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
+            thread t1(&KeyBoardTask::run,&keyboardTask);
+            thread t2(&ReadFromSocketTask::run,&readFromSocketTask);
+            t1.join();
+            t2.join();
         }
-
     }
 
-    mutex sharedMutex;
-    KeyboardTask keyboardTask(sharedMutex,connectionHandler);
-    ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
-    thread t1(&KeyboardTask::run(),&keyboardTask);    //todo
-    thread t2(&ReadFromSocketTask::run(),&readFromSocketTask);    //todo
-    t1.join();
-    t2.join();
     return 0;
 }

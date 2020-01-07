@@ -13,14 +13,12 @@ using namespace std;
 
 class StompMsgEncoderDecoder {//todo
 public:
-StompMsgEncoderDecoder(User* user1);
+StompMsgEncoderDecoder(User& user1);
 ~StompMsgEncoderDecoder();
 string decode(string stomp);    //decode stomp frame to string
 void encode(string msg,string &stomp);      //encode string to stomp frame
-void splitWords(string line,vector<string> & words);
-vector<string> split_string(const string& str);
 private:
-    User* user;
+    User user;
 };
 
 

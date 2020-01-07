@@ -8,7 +8,7 @@
 
 using namespace std;
 
-StompMsgEncoderDecoder::StompMsgEncoderDecoder(User* user1):user(user1) {            //todo
+StompMsgEncoderDecoder::StompMsgEncoderDecoder(User& user1):user(user1) {            //todo
 }
 
 StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
