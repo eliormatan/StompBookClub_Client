@@ -6,29 +6,6 @@
 
 using namespace std;
 
-class KeyboardTask{   //will used by thread1
-private:
-    mutex & _mutex;
-    ConnectionHandler & _connectionHandler;
-public:
-    KeyboardTask(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
-     void run(){  //todo
-        while(!logoutCommand) {
-            if (command == "login")
-        }
-    }
-};
-class ReadFromSocketTask{    //will used by thread2
-private:
-    mutex & _mutex;
-    ConnectionHandler & _connectionHandler;
-public:
-    ReadFromSocketTask(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
-    void run(){  //todo
-
-    }
-};
-
 /**
 * This code assumes that the server replies the exact text the client sent it (as opposed to the practical session example)
 */
