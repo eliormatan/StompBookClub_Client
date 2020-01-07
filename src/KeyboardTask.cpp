@@ -20,7 +20,7 @@ public:
             std::cin.getline(buf, bufsize);
             std::string line(buf);
             string frameToSend = encDec.encode(line);
-            int len=frameToSend.length();
+//            int len=frameToSend.length();
             if (!_connectionHandler.sendLine(frameToSend)) {
 //                std::cout << "Disconnected. Exiting...\n" << std::endl;
                 break;

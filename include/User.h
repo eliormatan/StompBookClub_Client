@@ -15,10 +15,12 @@ class User {
 private:
     map<string,vector<Book>> bookMap;
     map<string,int> subscribeByID;
+    int runningID;
     User();
 public:
     User* getInstance();
     string getBooksByGenre(string genre);
+    int getRunningID();
     ~User();
 
 };

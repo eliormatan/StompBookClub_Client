@@ -32,10 +32,32 @@ string StompMsgEncoderDecoder::splitWords(string line) {
     }
 }
 
-string StompMsgEncoderDecoder::decode(string stomp) {
-    return std::__cxx11::string();
-}
+void StompMsgEncoderDecoder::decode(string stomp,string& answer) {
+    vector<string> splitedString = split_string(stomp);
+    vector<string>::iterator iter = splitedString.begin();
+    string first = *iter;
+    if(first=="MESSAGE"){
 
+    }
+}
+}
 string StompMsgEncoderDecoder::encode(string msg) {
     return std::__cxx11::string();
 }
+
+vector<string> split_string(const string& str)
+{
+    std::vector<std::string> strings;
+
+    string::size_type pos = 0;
+    string::size_type prev = 0;
+    while ((pos = str.find('\n', prev)) != string::npos)
+    {
+        strings.push_back(str.substr(prev, pos - prev));
+        prev = pos + 1;
+    }
+
+    // To get the last substring (or only, if delimiter is not found)
+    strings.push_back(str.substr(prev));
+
+    return strings;

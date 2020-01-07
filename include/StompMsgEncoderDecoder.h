@@ -14,10 +14,10 @@ class StompMsgEncoderDecoder {//todo
 public:
 StompMsgEncoderDecoder();
 ~StompMsgEncoderDecoder();
-string decode(string stomp);    //decode stomp frame to string
+void decode(string stomp,string& answer);    //decode stomp frame to string
 string encode(string msg);      //encode string to stomp frame
 string splitWords(string line);
-
+vector<string> split_string(const string& str)
 private:
 
 };
