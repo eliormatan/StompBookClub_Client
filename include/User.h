@@ -20,7 +20,7 @@ private:
     string password;
 public:
     User(string name,string password);
-    string getBooksByGenre(string genre);
+    vector<Book> getBooksByGenre(string genre);
     int getRunningID();
     string getName();
     string getPassword();

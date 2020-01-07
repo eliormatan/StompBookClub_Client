@@ -4,8 +4,8 @@
 
 #include "../include/User.h"
 
-string User::getBooksByGenre(string genre) {
-    return std::__cxx11::string();
+vector<Book> User::getBooksByGenre(string genre) {
+    return vector<Book>();
 }
 
 User::User(string _name,string _password):name(_name),password(_password) {

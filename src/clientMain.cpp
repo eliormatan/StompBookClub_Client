@@ -9,6 +9,8 @@
 #include "../include/ReadFromSocketTask.h"
 #include <thread>
 #include <mutex>
+#include <boost/lexical_cast.hpp>
+
 using namespace std;
 int main (int argc, char *argv[]) {
     bool loggedIN = false;

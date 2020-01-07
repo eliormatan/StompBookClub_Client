@@ -39,7 +39,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
     }
     else if(currWord=="join"){
         string genre=words[1];
-        int id=user->getRunningID();
+        int id=user.getRunningID();
         stomp="SUBSCRIBE"+string("\n")+
                 "destination:"+genre+string("\n")+
                 "id:"+to_string(id)+string("\n")+
@@ -55,19 +55,40 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
         string genre=words[1];
         string bookName=words[2];
         stomp="SEND"+string("\n")+
-                ""
+                "destination:"+genre+string("\n")+
+                user.getName()+" has added the book "+bookName+string("\n")+"\0";
     }
     else if(currWord=="borrow"){
-
+        string genre=words[1];
+        string bookName=words[2];
+        stomp="SEND"+string("\n")+
+              "destination:"+genre+string("\n")+
+              user.getName()+" wish to borrow "+bookName+string("\n")+"\0";
     }
     else if(currWord=="return"){
-
+        string genre=words[1];
+        string bookName=words[2];
+        string bookLender;
+        vector<Book> booksByGenre=user.getBooksByGenre(genre); //todo: getbooksbygenre returns the vector(!) of books by genre
+        for (Book &book : booksByGenre) {
+            if (book.getName() == bookName) {
+                bookLender = book.getBorrowedFrom();
+                break;
+            }
+        }
+        stomp="SEND"+string("\n")+
+                "Returning "+bookName+" to "+bookLender+string("\n")+"\0";;
     }
     else if(currWord=="status"){
-
+        string genre=words[1];
+        stomp="SEND"+string("\n")+
+                "destination:"+genre+string("\n")+
+                "book status"+string("\n")+"\0";
     }
     else if(currWord=="logout"){
-
+        int receipt=user.getRunningID();
+        stomp="DISCONNECT"+string("\n")+
+                "receipt:"+to_string(receipt)+string("\n")+"\0";
     }
 
 

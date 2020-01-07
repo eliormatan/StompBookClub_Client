@@ -14,3 +14,11 @@ Book::~Book() {
 string Book::toString() {
     return name;
 }
+
+string Book::getBorrowedFrom() {
+    return borrowedFrom;
+}
+
+const string &Book::getName() const {
+    return name;
+}
