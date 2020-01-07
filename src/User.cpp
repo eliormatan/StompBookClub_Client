@@ -8,7 +8,7 @@ string User::getBooksByGenre(string genre) {
     return std::__cxx11::string();
 }
 
-User::User() {
+User::User(string _name,string _password):name(_name),password(_password) {
     bookMap = map<string,vector<Book>>();
     subscribeByID = map<string,int>();
 
@@ -19,10 +19,16 @@ User::~User() {
 //    delete subscribeByID;
 }
 
-User *User::getInstance() {
-    return this;
-}
 
-int User::getrunningID() {
+int User::getRunningID() {
     return runningID++;
 }
+
+string User::getName() {
+    return name;
+}
+
+string User::getPassword() {
+    return password;
+}
+

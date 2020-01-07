@@ -16,11 +16,14 @@ private:
     map<string,vector<Book>> bookMap;
     map<string,int> subscribeByID;
     int runningID;
-    User();
+    string name;
+    string password;
 public:
-    static User* getInstance();
+    User(string name,string password);
     string getBooksByGenre(string genre);
     int getRunningID();
+    string getName();
+    string getPassword();
     ~User();
 
 };
