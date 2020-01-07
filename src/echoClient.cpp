@@ -6,22 +6,22 @@
 
 using namespace std;
 
-class ReadFromKeyboard{   //will used by thread1
+class KeyboardTask{   //will used by thread1
 private:
     mutex & _mutex;
     ConnectionHandler & _connectionHandler;
 public:
-    ReadFromKeyboard(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
-    void run(){  //todo
-
+    KeyboardTask(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
+     void run(){  //todo
+        if(=="login")
     }
 };
-class ReadFromSocket{    //will used by thread2
+class ReadFromSocketTask{    //will used by thread2
 private:
     mutex & _mutex;
     ConnectionHandler & _connectionHandler;
 public:
-    ReadFromSocket(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
+    ReadFromSocketTask(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
     void run(){  //todo
 
     }
@@ -82,7 +82,11 @@ int main (int argc, char *argv[]) {
         }
     }
     mutex sharedMutex;
-    ReadFromKeyboard&mutex,connectionHandler); //:todo
-
+    KeyboardTask keyboardTask(sharedMutex,connectionHandler);
+    ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
+    thread t1(&KeyboardTask::run(),&keyboardTask);    //todo
+    thread t2(&ReadFromSocketTask::run(),&readFromSocketTask);    //todo
+    t1.join();
+    t2.join();
     return 0;
 }
