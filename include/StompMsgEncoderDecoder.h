@@ -5,6 +5,7 @@
 #ifndef BOOST_ECHO_CLIENT2_STOMPMSGENCODERDECODER_H
 #define BOOST_ECHO_CLIENT2_STOMPMSGENCODERDECODER_H
 
+#include "User.h"
 #include <string>
 #include <vector>
 
