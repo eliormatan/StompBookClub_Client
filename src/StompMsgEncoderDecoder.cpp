@@ -1,42 +1,29 @@
 //
 // Created by eliorma@wincs.cs.bgu.ac.il on 06/01/2020.
 //
-
+#include "../include/SplitThings.h"
 #include "../include/StompMsgEncoderDecoder.h"
 #include "../include/User.h"
 #include <vector>
 
 using namespace std;
 
-StompMsgEncoderDecoder::StompMsgEncoderDecoder(){            //todo
-    user=user.getIntance();
+StompMsgEncoderDecoder::StompMsgEncoderDecoder(User* user1):user(user1) {            //todo
 }
 
 StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 }
 
-void StompMsgEncoderDecoder::splitWords(string line,vector<string>& words) {
-        string word;
-        for(unsigned int i=0;i<line.size();i++){
-            if(line[i] == ' '){
-                words.push_back(word);
-                word = "";
-            }
-            else{
-                word += line[i];
-            }
-        }
-        words.push_back(word);
-}
 
 string StompMsgEncoderDecoder::decode(string stomp) {   //todo
     return std::__cxx11::string();
 }
 
+
 void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
     vector<string> words;
-    splitWords(msg,words);
+    SplitThings::splitWords(msg,words);
     string currWord=words[0];
     if(currWord=="login"){
         int seperate=words[1].find(':');
@@ -52,7 +39,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
     }
     else if(currWord=="join"){
         string genre=words[1];
-        int id=user.getRunningID();
+        int id=user->getRunningID();
         stomp="SUBSCRIBE"+string("\n")+
                 "destination:"+genre+string("\n")+
                 "id:"+to_string(id)+string("\n")+
@@ -82,5 +69,6 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
     else if(currWord=="logout"){
 
     }
+
 
 }

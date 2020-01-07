@@ -11,6 +11,7 @@ string User::getBooksByGenre(string genre) {
 User::User() {
     bookMap = map<string,vector<Book>>();
     subscribeByID = map<string,int>();
+
 }
 
 User::~User() {
@@ -22,6 +23,6 @@ User *User::getInstance() {
     return this;
 }
 
-int User::getRunningID() {
+int User::getrunningID() {
     return runningID++;
 }

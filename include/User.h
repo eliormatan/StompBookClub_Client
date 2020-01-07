@@ -18,7 +18,7 @@ private:
     int runningID;
     User();
 public:
-    User* getInstance();
+    static User* getInstance();
     string getBooksByGenre(string genre);
     int getRunningID();
     ~User();

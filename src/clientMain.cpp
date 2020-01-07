@@ -19,6 +19,17 @@ int main (int argc, char *argv[]) {
         }
         if(subAction=="login"){
             loggedIN = true;
+            int seperate=words[1].find(':');
+            string host=words[1].substr(0,seperate);
+            string port=words[1].substr(seperate+1,words[1].length()-1);
+            string username=words[2];
+            string password=words[3];
+            stomp="CONNECT"+string("\n")+
+                  "accept-version:1.2"+string("\n")+
+                  "host:stomp.cs.bgu.ac.il"+string("\n")+
+                  "login:"+username+string("\n")+
+                  "passcode:"+password+string("\n")+"\0";
+
         }
 
     }
