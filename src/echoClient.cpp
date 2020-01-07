@@ -13,7 +13,9 @@ private:
 public:
     KeyboardTask(mutex& mutex,ConnectionHandler& connectionHandler) : _mutex(mutex),_connectionHandler(connectionHandler) {}
      void run(){  //todo
-        if(=="login")
+        while(!logoutCommand) {
+            if (command == "login")
+        }
     }
 };
 class ReadFromSocketTask{    //will used by thread2
