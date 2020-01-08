@@ -42,12 +42,25 @@ int main (int argc, char *argv[]) {
             mutex sharedMutex;
             User userLogged(username,password);
             StompMsgEncoderDecoder msgEncoderDecoder(userLogged);
-            KeyBoardTask keyboardTask(sharedMutex,connectionHandler,msgEncoderDecoder);
-            ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
-            thread t1(&KeyBoardTask::run,&keyboardTask);
-            thread t2(&ReadFromSocketTask::run,&readFromSocketTask);
-            t1.join();
-            t2.join();
+            std::string answer;
+            if (!connectionHandler.getLine(answer)) {
+                vector<string> words;
+                SplitThings::splitWords(answer,words);
+                if(words[0]=="CONNECTED"){
+                    cout << "Login Succesfuly :)" << endl;
+                    KeyBoardTask keyboardTask(sharedMutex,connectionHandler,msgEncoderDecoder);
+                    ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
+                    thread t1(&KeyBoardTask::run,&keyboardTask);
+                    thread t2(&ReadFromSocketTask::run,&readFromSocketTask);
+                    t1.join();
+                    t2.join();
+                }
+            }
+            else{
+                cout << "Cannot login" << endl;
+
+            }
+
         }
     }
 

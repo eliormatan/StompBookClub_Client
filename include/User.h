@@ -15,6 +15,7 @@ class User {
 private:
     map<string,vector<Book*>*> bookMap;
     map<string,int> subscribeByID;
+    map<string,int> openMissions;
     int runningID;
     string name;
     string password;
@@ -24,6 +25,7 @@ public:
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
+//    void addOpenMission(int id,);
     int getRunningID();
     string getName();
     string getPassword();
