@@ -18,7 +18,6 @@ public:
     ~Book();
     string getBorrowedFrom(); //todo: how do we get it?
     string toString();
-
     const string &getName() const;
 };
 

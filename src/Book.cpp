@@ -22,3 +22,4 @@ string Book::getBorrowedFrom() {
 const string &Book::getName() const {
     return name;
 }
+

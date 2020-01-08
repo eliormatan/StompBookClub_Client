@@ -4,9 +4,6 @@
 
 #include "../include/User.h"
 
-vector<Book> User::getBooksByGenre(string genre) {
-    return vector<Book>();
-}
 
 User::User(string _name,string _password):name(_name),password(_password) {
     bookMap = map<string,vector<Book>>();
@@ -30,5 +27,13 @@ string User::getName() {
 
 string User::getPassword() {
     return password;
+}
+
+string User::addBookToInventory(string bookName, string genre, string borrowedFrom) {
+    return std::__cxx11::string();
+}
+
+string User::removeBookFromInventory(string genre, string bookName) {
+    return std::__cxx11::string();
 }
 
