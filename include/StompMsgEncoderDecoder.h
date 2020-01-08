@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class StompMsgEncoderDecoder {//todo
+class StompMsgEncoderDecoder {
 public:
 StompMsgEncoderDecoder(User& user1);
 ~StompMsgEncoderDecoder();
