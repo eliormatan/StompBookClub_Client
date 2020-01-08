@@ -13,15 +13,16 @@ using namespace std;
 
 class User {
 private:
-    map<string,vector<Book>> bookMap;
+    map<string,vector<Book*>*> bookMap;
     map<string,int> subscribeByID;
     int runningID;
     string name;
     string password;
 public:
     User(string name,string password);
-    string removeBookFromInventory(string genre,string bookName);
-    string addBookToInventory(string bookName,string genre,string borrowedFrom);
+    string removeBookFromInventory(string genre,string bookName); //return the bookOwner
+    void addBookToInventory(string bookName,string genre,string borrowedFrom); //
+    void removeAllSubscribe();
     int getRunningID();
     string getName();
     string getPassword();
