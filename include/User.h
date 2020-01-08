@@ -23,6 +23,7 @@ public:
     string removeBookFromInventory(string genre,string bookName); //return the bookOwner
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
+    void subscribeWithID(string genre,int subscribeID);
     int getRunningID();
     string getName();
     string getPassword();

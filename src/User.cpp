@@ -8,13 +8,12 @@
 User::User(string _name,string _password):name(_name),password(_password) {
     bookMap = map<string,vector<Book*>*>();
     subscribeByID = map<string,int>();
-
 }
 
 User::~User() {
-//    delete bookMap;
-//    delete subscribeByID;
+
 }
+
 
 
 int User::getRunningID() {
@@ -31,9 +30,9 @@ string User::getPassword() {
 
 void User::addBookToInventory(string bookName, string genre, string borrowedFrom) {
     Book newBook(bookName,borrowedFrom);
-    map<string,vector<Book*>>::iterator iter = bookMap.find(bookName);
+    map<string,vector<Book*>*>::iterator iter = bookMap.find(bookName);
     if(iter!=bookMap.end()){
-        iter->second.insert(iter->second.begin(),new Book(bookName,borrowedFrom));
+        iter->second->insert(iter->second->begin(),new Book(bookName,borrowedFrom));
     }
     else{
         vector<Book*>* vectorToInsert = new vector<Book*>();
@@ -45,18 +44,31 @@ void User::addBookToInventory(string bookName, string genre, string borrowedFrom
 string User::removeBookFromInventory(string genre, string bookName) {
     map<string,vector<Book*>*>::iterator iter = bookMap.find(genre);
     if(iter!=bookMap.end())
-    {
-        for(vector<Book*>::iterator b=iter->second->begin();b<iter->second->end();b++){
-            if(b->getName()==bookName){
-                string borrowerName =  b->getBorrowedFrom();
-                iter->second->erase(b);
+//    {
+        for(int i=0;i<iter->second->size();i++)
+        {
+            if(iter->second->at(i)->getName()==bookName)
+            {
+                string ownerName = iter->second->at(i)->getBorrowedFrom();
+                iter->second->erase(iter->second->begin()+i);
             }
         }
-    }
+
     return nullptr;
 }
 
 void User::removeAllSubscribe() {
-
+    for(map<string,vector<Book*>*>::iterator iter=bookMap.begin();iter!=bookMap.end();iter++){
+        for(int i=0;i<iter->second->size();i++)
+        {
+            delete iter->second->at(i);
+        }
+        delete (iter->second);
+    }
 }
+
+void User::subscribeWithID(string genre, int subscribeID) {
+    subscribeByID.insert(pair<string,int>(genre,subscribeID));
+}
+
 
