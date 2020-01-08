@@ -17,7 +17,6 @@ public:
     Book(string _name,string _borrowedFrom);
     ~Book();
     string getBorrowedFrom(); //todo: how do we get it?
-    string toString();
     const string &getName() const;
 };
 

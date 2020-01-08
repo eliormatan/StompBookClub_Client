@@ -11,10 +11,6 @@ Book::~Book() {
     borrowedFrom = nullptr;
 }
 
-string Book::toString() {
-    return name;
-}
-
 string Book::getBorrowedFrom() {
     return borrowedFrom;
 }

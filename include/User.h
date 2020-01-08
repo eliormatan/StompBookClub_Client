@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include "Book.h"
+#include "Requests.h"
 
 using namespace std;
 
@@ -15,21 +16,32 @@ class User {
 private:
     map<string,vector<Book*>*> bookMap;
     map<string,int> subscribeByID;
-    map<string,int> openMissions;
+    vector<Requests *> openRequests;
     int runningID;
+    int logOutID;
+private:
     string name;
     string password;
+    bool isLoggedOut;
 public:
     User(string name,string password);
+    ~User();
     string removeBookFromInventory(string genre,string bookName); //return the bookOwner
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
-//    void addOpenMission(int id,);
+    void getAllBooks(string& books,string genre);
+    void addRequest(Requests* requests);
+    void setLogOutId(int logOutId);
+    void setIsLoggedOut(bool isLoggedOut);
     int getRunningID();
+    int getSubscribeIDbyTopic(string genre);
+    bool removeRequest(string bookName,string genre,int subscribeID);
+    bool findBook(string genre,string bookName);
     string getName();
     string getPassword();
-    ~User();
+    int getLogOutId() const;
+    bool getisLoggedOut() const;
 
 };
 

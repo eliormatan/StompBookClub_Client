@@ -13,56 +13,52 @@
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
-int main (int argc, char *argv[]) {
+
+int main(int argc, char *argv[]) {
     bool loggedIN = false;
-    while(!loggedIN){
-        string action,subAction;
+    while (!loggedIN) {
+        string action, subAction;
         std::getline(std::cin, action);
         vector<string> words;
-        SplitThings::splitWords(action,words);
-        string currWord=words[0];
-        if(currWord=="login"){
+        SplitThings::splitWords(action, words);
+        string currWord = words[0];
+        if (currWord == "login") {
             loggedIN = true;
-            int seperate=words[1].find(':');
-            string host=words[1].substr(0,seperate);
-            string port=words[1].substr(seperate+1,words[1].length()-1);
-            string username=words[2];
-            string password=words[3];
-            string stomp="CONNECT"+string("\n")+
-                  "accept-version:1.2"+string("\n")+
-                  "host:stomp.cs.bgu.ac.il"+string("\n")+
-                  "login:"+username+string("\n")+
-                  "passcode:"+password+string("\n")+"\0";
+            int seperate = words[1].find(':');
+            string host = words[1].substr(0, seperate);
+            string port = words[1].substr(seperate + 1, words[1].length() - 1);
+            string username = words[2];
+            string password = words[3];
+            string stomp = "CONNECT" + string("\n") +
+                           "accept-version:1.2" + string("\n") +
+                           "host:stomp.cs.bgu.ac.il" + string("\n") +
+                           "login:" + username + string("\n") +
+                           "passcode:" + password + string("\n") + "\0";
             ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port));
             if (!connectionHandler.connect()) {
                 std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
                 return 1;
             }
-            connectionHandler.sendFrameAscii(stomp,'\0');
+            connectionHandler.sendFrameAscii(stomp, '\0');
             mutex sharedMutex;
-            User userLogged(username,password);
-            StompMsgEncoderDecoder msgEncoderDecoder(userLogged);
+            User userLogged(username, password);
+            StompMsgEncoderDecoder msgEncoderDecoder(userLogged, connectionHandler);
             std::string answer;
-            if (!connectionHandler.getLine(answer)) {
+            if (connectionHandler.getLine(answer)) {
                 vector<string> words;
-                SplitThings::splitWords(answer,words);
-                if(words[0]=="CONNECTED"){
+                SplitThings::split_string(answer, words);
+                if (words[0] == "CONNECTED") {
                     cout << "Login Succesfuly :)" << endl;
-                    KeyBoardTask keyboardTask(sharedMutex,connectionHandler,msgEncoderDecoder);
-                    ReadFromSocketTask readFromSocketTask(sharedMutex,connectionHandler);
-                    thread t1(&KeyBoardTask::run,&keyboardTask);
-                    thread t2(&ReadFromSocketTask::run,&readFromSocketTask);
+                    KeyBoardTask keyboardTask(sharedMutex, connectionHandler, msgEncoderDecoder);
+                    ReadFromSocketTask readFromSocketTask(sharedMutex, connectionHandler, msgEncoderDecoder);
+                    thread t1(&KeyBoardTask::run, &keyboardTask);
+                    thread t2(&ReadFromSocketTask::run, &readFromSocketTask);
                     t1.join();
                     t2.join();
                 }
             }
-            else{
-                cout << "Cannot login" << endl;
-
-            }
-
         }
-    }
 
-    return 0;
+        return 0;
+    }
 }

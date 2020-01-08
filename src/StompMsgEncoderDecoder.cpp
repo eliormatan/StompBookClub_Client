@@ -5,11 +5,11 @@
 #include "../include/StompMsgEncoderDecoder.h"
 #include "../include/User.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
-StompMsgEncoderDecoder::StompMsgEncoderDecoder(User& user1):user(user1) {            //todo
-}
+StompMsgEncoderDecoder::StompMsgEncoderDecoder(User& user1,ConnectionHandler& _connect):user(user1),connect(_connect) {  }          //todo}
 
 StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
@@ -17,8 +17,62 @@ StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 
 string StompMsgEncoderDecoder::decode(string stomp) {   //todo
-    
-    return std::__cxx11::string();
+    vector<string> lines;
+    SplitThings::split_string(stomp,lines);
+    string readyStomp="";
+    if(lines[0]=="RECEIPT"){
+        if(stoi(lines[1].substr(11))==user.getLogOutId() & user.getisLoggedOut())
+        {
+            connect.close();
+            cout << "Disconnecting..." << endl;
+        }
+    }
+    else if(lines[0]=="MESSAGE"){
+        if(lines[4]=="book status"){
+            string genre = lines[3].substr(12);
+            string allBooks;
+            user.getAllBooks(allBooks,genre);
+            readyStomp="SEND"+string("\n")+
+                  "destination:"+genre+string("\n")+
+                  allBooks+"\n"+"\0";
+        }
+        else
+        {
+            vector<string> splited;
+            SplitThings::splitWords(lines[4],splited);
+            if(splited[0]=="Returning"){
+                if(splited[3]==user.getName()){
+                    string genre = lines[3].substr(12);
+                    user.addBookToInventory(splited[1],genre,user.getName());
+                }
+            }
+            else if(splited[3]=="borrow"){
+                string genre = lines[3].substr(12);
+                string book =  splited[1];
+                if(user.findBook(genre,book)) {
+                    readyStomp = "SEND" + string("\n") +
+                            "destination:" + genre + string("\n") +
+                            user.getName()+" has "+book+string("\n")+"\0";
+                }
+            }
+            else if(splited[0]=="Taking"){
+                if(splited[3]==user.getName()){
+                    string genre = lines[3].substr(12);
+                    user.removeBookFromInventory(genre,splited[1]);
+                }
+                else{
+                    string bookname = splited[1];
+                    int subscribeID = stoi(lines[1].substr(13));
+                    string genre = lines[3].substr(12);
+                    if(user.removeRequest(bookname,genre,subscribeID)){
+                        user.addBookToInventory(bookname,genre,splited[3]);
+
+                    }
+                }
+            }
+        }
+    }
+    return readyStomp;
 }
 
 
@@ -35,12 +89,14 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
                 "id:"+to_string(id)+string("\n")+
                 "receipt:"+to_string(id2)+string("\n")+"\0";
         user.subscribeWithID(genre,id);
+        cout << "Join club "+genre << endl;
     }
     else if(currWord=="exit"){
         string genre=words[1];
         int id=user.getRunningID();
         stomp="UNSUBSCRIBE"+string("\n")+
                 "id:"+to_string(id)+string("\n")+"\0";
+        cout << "Exited club "+genre << endl;
     }
     else if(currWord=="add"){
         string genre=words[1];
@@ -56,6 +112,8 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
         stomp="SEND"+string("\n")+
               "destination:"+genre+string("\n")+
               user.getName()+" wish to borrow "+bookName+string("\n")+"\0";
+        Requests* request = new Requests(user.getSubscribeIDbyTopic(genre),genre,bookName);
+        user.addRequest(request);
     }
     else if(currWord=="return"){
         string genre=words[1];
@@ -75,5 +133,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
         user.removeAllSubscribe();
         stomp="DISCONNECT"+string("\n")+
                 "receipt:"+to_string(receipt)+string("\n")+"\0";
+        user.setLogOutId(receipt);
+        user.setIsLoggedOut(true);
     }
 }

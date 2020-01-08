@@ -6,6 +6,7 @@
 #define BOOST_ECHO_CLIENT2_STOMPMSGENCODERDECODER_H
 
 #include "User.h"
+#include "connectionHandler.h"
 #include <string>
 #include <vector>
 
@@ -13,12 +14,13 @@ using namespace std;
 
 class StompMsgEncoderDecoder {
 public:
-StompMsgEncoderDecoder(User& user1);
+StompMsgEncoderDecoder(User& user1,ConnectionHandler& _connect);
 ~StompMsgEncoderDecoder();
 string decode(string stomp);    //decode stomp frame to stomp frame response
 void encode(string msg,string &stomp);      //encode string to stomp frame
 private:
     User user;
+    ConnectionHandler& connect;
 };
 
 

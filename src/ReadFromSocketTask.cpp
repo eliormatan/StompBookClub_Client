@@ -1,10 +1,11 @@
 
 #include "../include/ReadFromSocketTask.h"
 
-ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler) : _mutex(mutex),
+ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler,StompMsgEncoderDecoder _encDec) : _mutex(mutex),
                                                                                              _connectionHandler(
                                                                                                      connectionHandler),
-                                                                                             terminated(false) {}
+                                                                                             terminated(false),
+                                                                                             encDec(_encDec){}
 
 void ReadFromSocketTask::run() {  //todo
     while (!terminated) {
@@ -13,12 +14,14 @@ void ReadFromSocketTask::run() {  //todo
             std::cout << "Disconnected. Exiting...\n" << std::endl;
             break;
         }
-        int len = answer.length();
-        answer.resize(len - 1);
-        std::cout << answer << std::endl;
-        if (answer == "bye") {
-            std::cout << "Exiting...\n" << std::endl;
-            break;
+        string decodedAns = encDec.decode(answer);
+        if(decodedAns!=""){
+            _connectionHandler.sendLine(decodedAns);
         }
+//        std::cout << answer << std::endl;
+//        if (answer == "bye") {
+//            std::cout << "Exiting...\n" << std::endl;
+//            break;
+//        }
     }
 }

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "../include/connectionHandler.h"
+#include "StompMsgEncoderDecoder.h"
 #include <thread>
 #include <mutex>
 
@@ -16,8 +17,9 @@ private:
     mutex &_mutex;
     ConnectionHandler &_connectionHandler;
     bool terminated;
+    StompMsgEncoderDecoder encDec;
 public:
-    ReadFromSocketTask(mutex& mutex,ConnectionHandler& connectionHandler);
+    ReadFromSocketTask(mutex& mutex,ConnectionHandler& connectionHandler,StompMsgEncoderDecoder _encDec);
     void run();
 };
 #endif //BOOST_ECHO_CLIENT2_READFROMSOCKETTASK_H
