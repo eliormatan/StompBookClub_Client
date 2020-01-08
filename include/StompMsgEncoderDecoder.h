@@ -15,7 +15,7 @@ class StompMsgEncoderDecoder {
 public:
 StompMsgEncoderDecoder(User& user1);
 ~StompMsgEncoderDecoder();
-string decode(string stomp);    //decode stomp frame to string
+string decode(string stomp);    //decode stomp frame to stomp frame response
 void encode(string msg,string &stomp);      //encode string to stomp frame
 private:
     User user;

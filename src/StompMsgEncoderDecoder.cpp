@@ -17,11 +17,12 @@ StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 
 string StompMsgEncoderDecoder::decode(string stomp) {   //todo
+    
     return std::__cxx11::string();
 }
 
 
-void StompMsgEncoderDecoder::encode(string msg,string &stomp) { //todo
+void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
     vector<string> words;
     SplitThings::splitWords(msg,words);
     string currWord=words[0];

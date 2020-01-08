@@ -12,7 +12,7 @@ using namespace std;
 
 class SplitThings {
 public:
-    static vector<string> split_string(const string& str);
+    static void split_string(const string& str,vector<string> & strings);
     static void splitWords(string line,vector<string> & words);
 };
 
