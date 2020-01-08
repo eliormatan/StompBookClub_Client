@@ -7,6 +7,7 @@
 #include "../include/SplitThings.h"
 #include "../include/KeyBoardTask.h"
 #include "../include/ReadFromSocketTask.h"
+#include "../include/StompMsgEncoderDecoder.h"
 #include <thread>
 #include <mutex>
 #include <boost/lexical_cast.hpp>
@@ -20,7 +21,7 @@ int main (int argc, char *argv[]) {
         vector<string> words;
         SplitThings::splitWords(action,words);
         string currWord=words[0];
-        if(subAction=="login"){
+        if(currWord=="login"){
             loggedIN = true;
             int seperate=words[1].find(':');
             string host=words[1].substr(0,seperate);
