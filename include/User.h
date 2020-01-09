@@ -14,9 +14,9 @@ using namespace std;
 
 class User {
 private:
-    map<string,vector<Book*>*> bookMap;
-    map<string,int> subscribeByID;
-    vector<Requests *> openRequests;
+    map<string,vector<Book*>*>* bookMap;
+    map<string,int>* subscribeByID;
+    vector<Requests *>* openRequests;
     int runningID;
     int logOutID;
 private:

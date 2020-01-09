@@ -16,7 +16,9 @@ void ReadFromSocketTask::run() {  //todo
         }
         string decodedAns = encDec.decode(answer);
         if(decodedAns!=""){
+            lock_guard<mutex> lock(mutex);
             _connectionHandler.sendLine(decodedAns);
+            lock_guard<mutex> unlock(mutex);
         }
 //        std::cout << answer << std::endl;
 //        if (answer == "bye") {

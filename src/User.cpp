@@ -7,9 +7,10 @@
 
 
 User::User(string _name,string _password):name(_name),password(_password),logOutID(-1),isLoggedOut(false) {
-    bookMap = map<string,vector<Book*>*>();
-    subscribeByID = map<string,int>();
-    openRequests = vector<Requests*>();
+    bookMap = new map<string,vector<Book*>*>();
+    subscribeByID = new map<string,int>();
+    openRequests = new vector<Requests*>();
+    runningID=0;
 }
 
 User::~User() {
@@ -32,20 +33,20 @@ string User::getPassword() {
 
 void User::addBookToInventory(string bookName, string genre, string borrowedFrom) {
 //    Book newBook(bookName,borrowedFrom);
-    map<string,vector<Book*>*>::iterator iter = bookMap.find(bookName);
-    if(iter!=bookMap.end()){
+    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
+    if(iter!=bookMap->end()){
         iter->second->insert(iter->second->begin(),new Book(bookName,borrowedFrom));
     }
     else{
         vector<Book*>* vectorToInsert = new vector<Book*>();
         vectorToInsert->insert(vectorToInsert->begin(),new Book(bookName,borrowedFrom));
-        bookMap.insert(bookMap.begin(),pair<string,vector<Book*>*>(genre,vectorToInsert));
+        bookMap->insert(bookMap->begin(),pair<string,vector<Book*>*>(genre,vectorToInsert));
     }
 }
 
 string User::removeBookFromInventory(string genre, string bookName) {
-    map<string,vector<Book*>*>::iterator iter = bookMap.find(genre);
-    if(iter!=bookMap.end())
+    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
+    if(iter!=bookMap->end())
 //    {
         for(int i=0;i<iter->second->size();i++)
         {
@@ -57,11 +58,11 @@ string User::removeBookFromInventory(string genre, string bookName) {
             }
         }
 
-    return nullptr;
+    return "";
 }
 
 void User::removeAllSubscribe() {
-    for(map<string,vector<Book*>*>::iterator iter=bookMap.begin();iter!=bookMap.end();iter++){
+    for(map<string,vector<Book*>*>::iterator iter=bookMap->begin();iter!=bookMap->end();iter++){
         for(int i=0;i<iter->second->size();i++)
         {
             delete iter->second->at(i);
@@ -71,12 +72,12 @@ void User::removeAllSubscribe() {
 }
 
 void User::subscribeWithID(string genre, int subscribeID) {
-    subscribeByID.insert(pair<string,int>(genre,subscribeID));
+    subscribeByID->insert(pair<string,int>(genre,subscribeID));
 }
 
 void User::getAllBooks(string &books,string genre) {
     books+=name+string(":");
-    for(auto genreOfMap:bookMap){
+    for(auto genreOfMap:*bookMap){
         if(genreOfMap.first==genre) {
             vector<Book *> *bookvec = genreOfMap.second;
             for (auto book:*bookvec) {
@@ -89,8 +90,8 @@ void User::getAllBooks(string &books,string genre) {
 }
 
 bool User::findBook(string genre, string bookName) {
-    map<string,vector<Book*>*>::iterator iter = bookMap.find(genre);
-    if(iter!=bookMap.end())
+    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
+    if(iter!=bookMap->end())
 //    {
         for(int i=0;i<iter->second->size();i++)
         {
@@ -103,14 +104,14 @@ bool User::findBook(string genre, string bookName) {
 }
 
 void User::addRequest(Requests *requests) {
-    openRequests.push_back(requests);
+    openRequests->push_back(requests);
 }
 
 bool User::removeRequest(string bookName, string genre, int subscribeID) {
-    for(auto req:openRequests){
+    for(auto req:*openRequests){
         if(bookName==req->getBookName()&&genre==req->getGenre()&&subscribeID==req->getSubscribeId())
         {
-            openRequests.erase(std::find(openRequests.begin(), openRequests.end(), req));
+            openRequests->erase(std::find(openRequests->begin(), openRequests->end(), req));
             return true;
         }
     }
@@ -118,7 +119,7 @@ bool User::removeRequest(string bookName, string genre, int subscribeID) {
 }
 
 int User::getSubscribeIDbyTopic(string genre) {
-    return subscribeByID.find(genre)->second;
+    return subscribeByID->find(genre)->second;
 }
 
 void User::setLogOutId(int logOutId) {

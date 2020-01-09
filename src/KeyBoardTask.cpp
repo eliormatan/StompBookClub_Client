@@ -13,10 +13,13 @@ void KeyBoardTask::run() {
         std::string line(buf);
         string frameToSend;
         encDec.encode(line,frameToSend);
-//            int len=frameToSend.length();
+        lock_guard<mutex> lock(mutex);
+            int len=frameToSend.length();
         if (!_connectionHandler.sendLine(frameToSend)) {
-//                std::cout << "Disconnected. Exiting...\n" << std::endl;
+                std::cout << "Disconnected. Exiting...\n" << std::endl;
+            lock_guard<mutex> unlock(mutex);
             break;
         }
+        lock_guard<mutex> unlock(mutex);
     }
 }

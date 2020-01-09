@@ -49,7 +49,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
             }
             else if(splited[3]=="borrow"){
                 string genre = lines[3].substr(12);
-                string book =  splited[1];
+                string book =  splited[4];
                 if(user.findBook(genre,book)) {
                     readyStomp = "SEND" + string("\n") +
                             "destination:" + genre + string("\n") +
@@ -90,7 +90,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
                 "id:"+to_string(id)+string("\n")+
                 "receipt:"+to_string(id2)+string("\n")+"\0";
         user.subscribeWithID(genre,id);
-        cout << "Join club "+genre << endl;
+        cout << "Joined club "+genre << endl;
     }
     else if(currWord=="exit"){
         string genre=words[1];
