@@ -17,6 +17,7 @@ StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 
 string StompMsgEncoderDecoder::decode(string stomp) {   //todo
+    cout<<stomp<<endl;
     vector<string> lines;
     SplitThings::split_string(stomp,lines);
     string readyStomp="";
@@ -101,7 +102,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
     else if(currWord=="add"){
         string genre=words[1];
         string bookName=words[2];
-        user.addBookToInventory(bookName,genre, nullptr);
+        user.addBookToInventory(bookName,genre, user.getName());
         stomp="SEND"+string("\n")+
                 "destination:"+genre+string("\n")+
                 user.getName()+" has added the book "+bookName+string("\n")+"\0";
