@@ -53,7 +53,7 @@ string User::removeBookFromInventory(string genre, string bookName) {
             if(iter->second->at(i)->getName()==bookName)
             {
                 string ownerName = iter->second->at(i)->getBorrowedFrom();
-                iter->second->erase(iter->second->begin()+i);
+                iter->second->at(i)->setIsMineAtTheMoment(false);
                 return ownerName;
             }
         }
@@ -93,7 +93,7 @@ bool User::findBook(string genre, string bookName) {
     map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
     if (iter != bookMap->end()) {
         for (int i = 0; i < iter->second->size(); i++) {
-            if (iter->second->at(i)->getName() == bookName) {
+            if (iter->second->at(i)->getName() == bookName & iter->second->at(i)->getIsMineAtTheMoment()) {
                 return true;
             }
         }

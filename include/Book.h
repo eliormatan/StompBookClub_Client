@@ -13,11 +13,17 @@ class Book {
 private:
     string name;
     string borrowedFrom;
+    bool isMineAtTheMoment;
 public:
     Book(string _name,string _borrowedFrom);
     ~Book();
-    string getBorrowedFrom(); //todo: how do we get it?
+    string getBorrowedFrom();
+
+    void setIsMineAtTheMoment(bool isMineAtTheMoment);
+
     const string &getName() const;
+
+    bool getIsMineAtTheMoment() const;
 };
 
 

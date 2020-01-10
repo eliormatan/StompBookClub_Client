@@ -4,7 +4,7 @@
 
 #include "../include/Book.h"
 
-Book::Book(string _name, string _borrowedFrom): name(_name),borrowedFrom(_borrowedFrom) {}
+Book::Book(string _name, string _borrowedFrom): name(_name),borrowedFrom(_borrowedFrom),isMineAtTheMoment(true) {}
 
 Book::~Book() {
     name = nullptr;
@@ -17,5 +17,13 @@ string Book::getBorrowedFrom() {
 
 const string &Book::getName() const {
     return name;
+}
+
+void Book::setIsMineAtTheMoment(bool isMineAtTheMoment) {
+    Book::isMineAtTheMoment = isMineAtTheMoment;
+}
+
+bool Book::getIsMineAtTheMoment() const {
+    return isMineAtTheMoment;
 }
 
