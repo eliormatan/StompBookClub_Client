@@ -73,7 +73,7 @@ string User::removeBookFromInventory(string genre, string bookName) {
             }
         }
 
-    return "";
+    return "BookError";
 }
 
 void User::removeAllSubscribe() {

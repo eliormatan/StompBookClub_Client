@@ -95,7 +95,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         cout << "Joined club " + genre << endl;
     } else if (currWord == "exit") {
         string genre = words[1];
-        int id = user.getRunningID();
+        int id = user.getSubscribeIDbyTopic(genre);
         stomp = "UNSUBSCRIBE" + string("\n") +
                 "id:" + to_string(id) + string("\n") + "\0";
         cout << "Exited club " + genre << endl;
