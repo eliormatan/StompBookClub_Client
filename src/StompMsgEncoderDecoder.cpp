@@ -131,6 +131,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
         string bookName=words[2];
         string bookLender=user.removeBookFromInventory(genre,bookName);    //remove book returns the name of the lender
         stomp="SEND"+string("\n")+
+                "destination:"+genre+string("\n")+
                 "Returning "+bookName+" to "+bookLender+string("\n")+"\0";
     }
     else if(currWord=="status"){
