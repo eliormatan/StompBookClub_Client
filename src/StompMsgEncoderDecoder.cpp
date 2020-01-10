@@ -17,7 +17,7 @@ StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
 
 
 string StompMsgEncoderDecoder::decode(string stomp) {   //todo
-    cout<<stomp<<endl;
+   // cout<<stomp<<endl;
     vector<string> lines;
     SplitThings::split_string(stomp,lines);
     string readyStomp="";
@@ -31,6 +31,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
     else if(lines[0]=="MESSAGE"){
         if(lines[4]=="book status"){
             string genre = lines[3].substr(12);
+            cout<<genre+":book status"<<endl;
             string allBooks;
             user.getAllBooks(allBooks,genre);
             readyStomp="SEND"+string("\n")+
@@ -41,14 +42,14 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
         {
             vector<string> splited;
             SplitThings::splitWords(lines[4],splited);
+            string genre = lines[3].substr(12);
+            cout<<genre+":"+lines[4] <<endl;
             if(splited[0]=="Returning"){
                 if(splited[3]==user.getName()){
-                    string genre = lines[3].substr(12);
                     user.addBookToInventory(splited[1],genre,user.getName());
                 }
             }
             else if(splited.size()>=4&&splited[3]=="borrow"){
-                string genre = lines[3].substr(12);
                 string book =  splited[4];
                 if(user.findBook(genre,book)) {
                     readyStomp = "SEND" + string("\n") +
@@ -56,10 +57,9 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                             user.getName()+" has "+book+string("\n")+"\0";
                 }
             }
-            else if(splited[1]=="has"){
+            else if(splited.size()>=2&&splited[1]=="has"){
                 string owner = splited[0];
                 string book = splited[2];
-                string genre = lines[3].substr(12);
                 int subscribeID = stoi(lines[1].substr(13));
                 if(user.findRequest(book,genre,subscribeID))
                 {
@@ -70,13 +70,11 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
             }
             else if(splited[0]=="Taking"){
                 if(splited[3]==user.getName()){
-                    string genre = lines[3].substr(12);
                     user.removeBookFromInventory(genre,splited[1]);
                 }
                 else{
                     string bookname = splited[1];
                     int subscribeID = stoi(lines[1].substr(13));
-                    string genre = lines[3].substr(12);
                     if(user.removeRequest(bookname,genre,subscribeID)){
                         user.addBookToInventory(bookname,genre,splited[3]);
 

@@ -83,24 +83,22 @@ void User::getAllBooks(string &books,string genre) {
             for (auto book:*bookvec) {
                 books += book->getName() + string(",");
             }
-            books.substr(0,books.length()-1);
+            books = books.substr(0,books.length()-1);
             return;
         }
     }
 }
 
 bool User::findBook(string genre, string bookName) {
-    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
-    if(iter!=bookMap->end())
-//    {
-        for(int i=0;i<iter->second->size();i++)
-        {
-            if(iter->second->at(i)->getName()==bookName)
-            {
+    map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
+    if (iter != bookMap->end()) {
+        for (int i = 0; i < iter->second->size(); i++) {
+            if (iter->second->at(i)->getName() == bookName) {
                 return true;
             }
         }
-    return false;
+        return false;
+    }
 }
 
 void User::addRequest(Requests *requests) {
