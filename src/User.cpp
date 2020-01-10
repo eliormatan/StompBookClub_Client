@@ -109,7 +109,7 @@ void User::addRequest(Requests *requests) {
 
 bool User::removeRequest(string bookName, string genre, int subscribeID) {
     for(auto req:*openRequests){
-        if(bookName==req->getBookName()&&genre==req->getGenre()&&subscribeID==req->getSubscribeId())
+        if(bookName==req->getBookName()&&genre==req->getGenre())
         {
             openRequests->erase(std::find(openRequests->begin(), openRequests->end(), req));
             return true;
@@ -140,7 +140,7 @@ void User::setIsLoggedOut(bool isLoggedOut) {
 
 bool User::findRequest(string bookName, string genre, int subscribeID) {
     for(auto req:*openRequests){
-        if(bookName==req->getBookName()&&genre==req->getGenre()&&subscribeID==req->getSubscribeId())
+        if(bookName==req->getBookName()&&genre==req->getGenre())
         {
             return true;
         }

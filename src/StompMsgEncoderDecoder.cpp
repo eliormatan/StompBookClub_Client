@@ -125,7 +125,7 @@ void StompMsgEncoderDecoder::encode(string msg,string &stomp) {
         stomp="SEND"+string("\n")+
               "destination:"+genre+string("\n")+
               user.getName()+" wish to borrow "+bookName+string("\n")+"\0";
-        Requests* request = new Requests(user.getSubscribeIDbyTopic(genre),genre,bookName);
+        Requests* request = new Requests(genre,bookName);
         user.addRequest(request);
     }
     else if(currWord=="return"){

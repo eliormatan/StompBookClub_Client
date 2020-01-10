@@ -4,9 +4,6 @@
 
 #include "../include/Requests.h"
 
-int Requests::getSubscribeId() const {
-    return subscribeID;
-}
 
 const string &Requests::getGenre() const {
     return genre;
@@ -16,4 +13,4 @@ const string &Requests::getBookName() const {
     return bookName;
 }
 
-Requests::Requests(int _subscribeID, string _genre, string _bookName):subscribeID(_subscribeID),genre(_genre),bookName(_bookName) {}
+Requests::Requests(string _genre, string _bookName):genre(_genre),bookName(_bookName) {}

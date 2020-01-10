@@ -10,14 +10,12 @@
 using namespace std;
 class Requests {
 private:
-    int subscribeID;
     string genre;
     string bookName;
 public:
-    Requests(int _subscribeID,string _genre,string _bookName);
+    Requests(string _genre,string _bookName);
     ~Requests();
 
-    int getSubscribeId() const;
 
     const string &getGenre() const;
 
