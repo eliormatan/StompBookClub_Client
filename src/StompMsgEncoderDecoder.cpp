@@ -47,13 +47,25 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                     user.addBookToInventory(splited[1],genre,user.getName());
                 }
             }
-            else if(splited[3]=="borrow"){
+            else if(splited.size()>=4&&splited[3]=="borrow"){
                 string genre = lines[3].substr(12);
                 string book =  splited[4];
                 if(user.findBook(genre,book)) {
                     readyStomp = "SEND" + string("\n") +
                             "destination:" + genre + string("\n") +
                             user.getName()+" has "+book+string("\n")+"\0";
+                }
+            }
+            else if(splited[1]=="has"){
+                string owner = splited[0];
+                string book = splited[2];
+                string genre = lines[3].substr(12);
+                int subscribeID = stoi(lines[1].substr(13));
+                if(user.findRequest(book,genre,subscribeID))
+                {
+                    readyStomp = "SEND" + string("\n") +
+                                 "destination:" + genre + string("\n") +
+                                 "Taking "+book+" from "+owner+string("\n")+"\0";
                 }
             }
             else if(splited[0]=="Taking"){

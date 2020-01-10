@@ -138,4 +138,15 @@ void User::setIsLoggedOut(bool isLoggedOut) {
     User::isLoggedOut = isLoggedOut;
 }
 
+bool User::findRequest(string bookName, string genre, int subscribeID) {
+    for(auto req:*openRequests){
+        if(bookName==req->getBookName()&&genre==req->getGenre()&&subscribeID==req->getSubscribeId())
+        {
+            return true;
+        }
+    }
+    return false;
+
+}
+
 

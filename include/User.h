@@ -38,6 +38,7 @@ public:
     int getSubscribeIDbyTopic(string genre);
     bool removeRequest(string bookName,string genre,int subscribeID);
     bool findBook(string genre,string bookName);
+    bool findRequest(string bookName,string genre,int subscribeID);
     string getName();
     string getPassword();
     int getLogOutId() const;
