@@ -61,11 +61,15 @@ string User::removeBookFromInventory(string genre, string bookName) {
 //    {
         for(int i=0;i<iter->second->size();i++)
         {
-            if(iter->second->at(i)->getName()==bookName)
+            Book* currBook = iter->second->at(i);
+            if(currBook->getName()==bookName & currBook->getIsMineAtTheMoment())
             {
-                string ownerName = iter->second->at(i)->getBorrowedFrom();
-                iter->second->at(i)->setIsMineAtTheMoment(false);
+                string ownerName = currBook->getBorrowedFrom();
+                currBook->setIsMineAtTheMoment(false);
                 return ownerName;
+            }
+            else{
+                return "BookError";
             }
         }
 
