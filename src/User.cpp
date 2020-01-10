@@ -35,7 +35,18 @@ void User::addBookToInventory(string bookName, string genre, string borrowedFrom
 //    Book newBook(bookName,borrowedFrom);
     map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
     if(iter!=bookMap->end()){
-        iter->second->insert(iter->second->begin(),new Book(bookName,borrowedFrom));
+        vector<Book*>* vectorToInsert = iter->second;
+        if(!findBook(genre,bookName)) {
+            iter->second->insert(iter->second->begin(), new Book(bookName, borrowedFrom));
+        }
+        else{
+            for(Book *book:*vectorToInsert){
+                if(book->getName()==bookName) {
+                    book->setIsMineAtTheMoment(true);
+                    break;
+                }
+            }
+        }
     }
     else{
         vector<Book*>* vectorToInsert = new vector<Book*>();
