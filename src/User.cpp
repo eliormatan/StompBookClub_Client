@@ -57,23 +57,20 @@ void User::addBookToInventory(string bookName, string genre, string borrowedFrom
 
 string User::removeBookFromInventory(string genre, string bookName) {
     map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
-    if(iter!=bookMap->end())
-//    {
-        for(int i=0;i<iter->second->size();i++)
-        {
-            Book* currBook = iter->second->at(i);
-            if(currBook->getName()==bookName & currBook->getIsMineAtTheMoment())
-            {
+    if(iter!=bookMap->end()) {
+        for (int i = 0; i < iter->second->size(); i++) {
+            Book *currBook = iter->second->at(i);
+            if (currBook->getName() == bookName & currBook->getIsMineAtTheMoment()) {
                 string ownerName = currBook->getBorrowedFrom();
                 currBook->setIsMineAtTheMoment(false);
                 return ownerName;
-            }
-            else{
+            } else {
                 return "BookError";
             }
         }
 
-    return "BookError";
+        return "BookError";
+    }
 }
 
 void User::removeAllSubscribe() {
