@@ -15,15 +15,14 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    bool loggedIN = false;
-    while (!loggedIN) {
+//    bool loggedIN = false;
+    while (true) {
         string action, subAction;
         std::getline(std::cin, action);
         vector<string> words;
         SplitThings::splitWords(action, words);
         string currWord = words[0];
         if (currWord == "login") {
-            loggedIN = true;
             int seperate = words[1].find(':');
             string host = words[1].substr(0, seperate);
             string port = words[1].substr(seperate + 1, words[1].length() - 1);
@@ -48,6 +47,7 @@ int main(int argc, char *argv[]) {
                 vector<string> words;
                 SplitThings::split_string(answer, words);
                 if (words[0] == "CONNECTED") {
+//                    loggedIN = true;
                     cout << "Login Succesfuly :)" << endl;
                     KeyBoardTask keyboardTask(sharedMutex, connectionHandler, msgEncoderDecoder);
                     ReadFromSocketTask readFromSocketTask(sharedMutex, connectionHandler, msgEncoderDecoder);
@@ -55,13 +55,12 @@ int main(int argc, char *argv[]) {
                     thread t2(&ReadFromSocketTask::run, &readFromSocketTask);
                     t1.join();
                     t2.join();
-                }
-                else{
-                    cout<<answer<<endl;
+//                    loggedIN = false;
+                } else {
+                    cout << answer << endl;
                 }
             }
         }
-
-        return 0;
     }
+
 }

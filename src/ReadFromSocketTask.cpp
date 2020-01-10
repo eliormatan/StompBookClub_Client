@@ -1,11 +1,12 @@
 
 #include "../include/ReadFromSocketTask.h"
 
-ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler,StompMsgEncoderDecoder _encDec) : _mutex(mutex),
-                                                                                             _connectionHandler(
-                                                                                                     connectionHandler),
-                                                                                             terminated(false),
-                                                                                             encDec(_encDec){}
+ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler,
+                                       StompMsgEncoderDecoder _encDec) : _mutex(mutex),
+                                                                         _connectionHandler(
+                                                                                 connectionHandler),
+                                                                         terminated(false),
+                                                                         encDec(_encDec) {}
 
 void ReadFromSocketTask::run() {  //todo
     while (!terminated) {
@@ -15,15 +16,13 @@ void ReadFromSocketTask::run() {  //todo
             break;
         }
         string decodedAns = encDec.decode(answer);
-        if(decodedAns!=""){
-            lock_guard<mutex> lock(mutex);
-            _connectionHandler.sendLine(decodedAns);
-            lock_guard<mutex> unlock(mutex);
+        if (decodedAns != "") {
+            if (decodedAns != "letMeOut!") {
+                lock_guard<mutex> lock(mutex);
+                _connectionHandler.sendLine(decodedAns);
+                lock_guard<mutex> unlock(mutex);
+            }
+            else terminated=true;
         }
-//        std::cout << answer << std::endl;
-//        if (answer == "bye") {
-//            std::cout << "Exiting...\n" << std::endl;
-//            break;
-//        }
     }
 }

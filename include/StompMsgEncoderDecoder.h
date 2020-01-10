@@ -17,10 +17,12 @@ public:
 StompMsgEncoderDecoder(User& user1,ConnectionHandler& _connect);
 ~StompMsgEncoderDecoder();
 string decode(string stomp);    //decode stomp frame to stomp frame response
-void encode(string msg,string &stomp);      //encode string to stomp frame
+void encode(string msg,string &stomp);
+bool isDone1() const;
 private:
-    User user;
+    User& user;
     ConnectionHandler& connect;
+    bool isDone;
 };
 
 

@@ -10,9 +10,10 @@
 using namespace std;
 
 StompMsgEncoderDecoder::StompMsgEncoderDecoder(User &user1, ConnectionHandler &_connect) : user(user1),
-                                                                                           connect(_connect) {}          //todo}
+                                                                                           connect(_connect),
+                                                                                           isDone(false){}          //todo}
 
-StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {      //todo
+StompMsgEncoderDecoder::~StompMsgEncoderDecoder() {
 
 }
 
@@ -26,6 +27,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
         if (stoi(lines[1].substr(11)) == user.getLogOutId() & user.getisLoggedOut()) {
             connect.close();
             cout << "Disconnecting..." << endl;
+            readyStomp = "letMeOut!";
         }
     } else if (lines[0] == "MESSAGE") {
         if (lines[4] == "book status") {
@@ -134,10 +136,15 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
                 "book status" + string("\n") + "\0";
     } else if (currWord == "logout") {
         int receipt = user.getRunningID();
+        user.setLogOutId(receipt);
+        user.setIsLoggedOut(true);
         user.removeAllSubscribe();
         stomp = "DISCONNECT" + string("\n") +
                 "receipt:" + to_string(receipt) + string("\n") + "\0";
-        user.setLogOutId(receipt);
-        user.setIsLoggedOut(true);
+        isDone = true;
     }
+}
+
+bool StompMsgEncoderDecoder::isDone1() const {
+    return isDone;
 }
