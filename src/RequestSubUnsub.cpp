@@ -16,12 +16,7 @@ const string &RequestSubUnsub::getGenre() const {
     return genre;
 }
 
-RequestSubUnsub::RequestSubUnsub(int _receiptID, int _subID, string _genre,string _type) {
-    receiptID = _receiptID;
-    subID = _subID;
-    genre = _genre;
-    type = _type;
-}
+RequestSubUnsub::RequestSubUnsub(int _receiptID, int _subID, string _genre,string _type): receiptID(_receiptID),subID(_subID),genre(_genre),type(_type) {}
 
 RequestSubUnsub::~RequestSubUnsub() {
 

@@ -21,8 +21,8 @@ public:
     const string &getGenre() const;
 
 private:
-    int subID;
     int receiptID;
+    int subID;
     string genre;
     string type;
 };

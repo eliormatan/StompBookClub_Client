@@ -25,7 +25,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
     string readyStomp = "";
     if (lines[0] == "RECEIPT") {
         int receiptID =  stoi(lines[1].substr(11));
-        if (receiptID == user.getLogOutId() & user.getisLoggedOut()) { //Logout
+        if ((receiptID == user.getLogOutId()) & user.getisLoggedOut()) { //Logout
             connect.close();
             cout << "Disconnecting..." << endl;
             readyStomp = "letMeOut!";

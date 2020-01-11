@@ -15,8 +15,8 @@ class KeyBoardTask {
 private:
     mutex &_mutex;
     ConnectionHandler &_connectionHandler;
-    bool terminated;
     StompMsgEncoderDecoder encDec;
+    bool terminated;
 public:
     KeyBoardTask(mutex& mutex,ConnectionHandler& connectionHandler,StompMsgEncoderDecoder& encDec1);
     void run();

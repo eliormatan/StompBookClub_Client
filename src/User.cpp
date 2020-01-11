@@ -6,54 +6,46 @@
 #include "../include/User.h"
 
 
-User::User(string _name, string _password) : name(_name), password(_password), logOutID(-1), isLoggedOut(false) {
-    bookMap = new map<string, vector<Book *> *>();
-    subscribeByID = new map<string, int>();
-    openRequests = new vector<RequestBorrow *>();
-    openSubUnSubReq = new vector<RequestSubUnsub*>();
-    runningID = 0;
-}
+User::User(string _name, string _password) : bookMap(new map<string, vector<Book *> *>()),
+                                             subscribeByID(new map<string, int>()),
+                                             openRequests(new vector<RequestBorrow *>()),
+                                             openSubUnSubReq(new vector<RequestSubUnsub *>()), runningID(0),
+                                             logOutID(-1), name(_name), password(_password), isLoggedOut(false) {}
 
 User &User::operator=(const User &other) { //Copy Operator
-    if(this!=&other){
+    if (this != &other) {
         clean();
-        this->bookMap = other.bookMap;
-        this->subscribeByID = other.subscribeByID;
-        this->openRequests = other.openRequests;
-        this->openSubUnSubReq = other.openSubUnSubReq;
-        this->runningID = other.runningID;
+        copy(other);
     }
     return (*this);
 }
+
 User::~User() {
     clean();
 }
 
-void User::clean(){
+void User::clean() {
     removeAllSubscribe();
     delete subscribeByID;
-    vector<RequestBorrow*> vect = *openRequests;
-    for(auto iter = vect.begin();iter!=vect.end();iter++){
+    vector<RequestBorrow *> vect = *openRequests;
+    for (auto iter = vect.begin(); iter != vect.end(); iter++) {
         delete *iter;
     }
-    vector<RequestSubUnsub*> vect2 = *openSubUnSubReq;
-    for(auto iter = vect2.begin();iter!=vect2.end();iter++){
+    vector<RequestSubUnsub *> vect2 = *openSubUnSubReq;
+    for (auto iter = vect2.begin(); iter != vect2.end(); iter++) {
         delete *iter;
     }
     delete openRequests;
     delete openSubUnSubReq;
     delete bookMap;
 }
+
 int User::getRunningID() {
     return runningID++;
 }
 
 string User::getName() {
     return name;
-}
-
-string User::getPassword() {
-    return password;
 }
 
 
@@ -81,9 +73,9 @@ void User::addBookToInventory(string bookName, string genre, string borrowedFrom
 string User::removeBookFromInventory(string genre, string bookName) {
     map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
     if (iter != bookMap->end()) {
-        for (int i = 0; i < iter->second->size(); i++) {
+        for (unsigned int i = 0; i < iter->second->size(); i++) {
             Book *currBook = iter->second->at(i);
-            if (currBook->getName() == bookName & currBook->getIsMineAtTheMoment()) {
+            if ((currBook->getName() == bookName) & (currBook->getIsMineAtTheMoment())) {
                 string ownerName = currBook->getBorrowedFrom();
                 currBook->setIsMineAtTheMoment(false);
                 return ownerName;
@@ -95,7 +87,7 @@ string User::removeBookFromInventory(string genre, string bookName) {
 
 void User::removeAllSubscribe() {
     for (map<string, vector<Book *> *>::iterator iter = bookMap->begin(); iter != bookMap->end(); iter++) {
-        for (int i = 0; i < iter->second->size(); i++) {
+        for (unsigned int i = 0; i < iter->second->size(); i++) {
             delete iter->second->at(i);
         }
         delete (iter->second);
@@ -116,7 +108,7 @@ void User::getAllBooks(string &books, string genre) {
                     books += book->getName() + string(",");
                 }
             }
-            if (books.length() > name.length()+1)
+            if (books.length() > name.length() + 1)
                 books = books.substr(0, books.length() - 1);
             return;
         }
@@ -126,14 +118,16 @@ void User::getAllBooks(string &books, string genre) {
 bool User::findBook(string genre, string bookName) {
     map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
     if (iter != bookMap->end()) {
-        for (int i = 0; i < iter->second->size(); i++) {
-            if (iter->second->at(i)->getName() == bookName & iter->second->at(i)->getIsMineAtTheMoment()) {
+        for (unsigned int i = 0; i < iter->second->size(); i++) {
+            if ((iter->second->at(i)->getName() == bookName) & (iter->second->at(i)->getIsMineAtTheMoment())) {
                 return true;
             }
         }
         return false;
     }
+    return false;
 }
+
 
 void User::addRequest(RequestBorrow *requests) {
     openRequests->push_back(requests);
@@ -173,7 +167,7 @@ void User::setIsLoggedOut(bool isLoggedOut) {
 bool User::findRequest(string bookName, string genre, int subscribeID) {
     for (auto req:*openRequests) {
         if (bookName == req->getBookName() && genre == req->getGenre()) {
-            if(req->isHandled())
+            if (req->isHandled())
                 return false;
             req->setHandled(true);
             return true;
@@ -195,6 +189,24 @@ RequestSubUnsub *User::getReqByRecipt(int receiptID) {
         }
     }
     return nullptr;
+}
+
+User::User(const User &other) : bookMap(other.bookMap),
+                                subscribeByID(other.subscribeByID),
+                                openRequests(other.openRequests),
+                                openSubUnSubReq(other.openSubUnSubReq), runningID(other.runningID),
+                                logOutID(other.logOutID), name(other.name), password(other.password), isLoggedOut(other.isLoggedOut) {}
+
+void User::copy(const User &other) {
+    this->bookMap = other.bookMap;
+    this->subscribeByID = other.subscribeByID;
+    this->openRequests = other.openRequests;
+    this->openSubUnSubReq = other.openSubUnSubReq;
+    this->runningID = other.runningID;
+    this->logOutID = other.logOutID;
+    this->name = other.name;
+    this->password = other.password;
+    this->isLoggedOut = other.isLoggedOut;
 }
 
 

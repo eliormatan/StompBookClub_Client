@@ -26,8 +26,10 @@ private:
     bool isLoggedOut;
 public:
     User(string name,string password);
+    User(const User &other);
     ~User();
     User& operator=(const User &other);
+    void copy(const User &other);
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
@@ -46,7 +48,6 @@ public:
     bool getisLoggedOut() const;
     RequestSubUnsub* getReqByRecipt(int receiptID);
     string getName();
-    string getPassword();
     string removeBookFromInventory(string genre,string bookName); //return the bookOwner
 
 };

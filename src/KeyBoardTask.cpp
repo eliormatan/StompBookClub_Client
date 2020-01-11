@@ -5,7 +5,7 @@
 
 KeyBoardTask::KeyBoardTask(mutex &mutex, ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
         : _mutex(
-        mutex), _connectionHandler(connectionHandler), terminated(false), encDec(encDec1) {}
+        mutex), _connectionHandler(connectionHandler),encDec(encDec1), terminated(false)  {}
 
 void KeyBoardTask::run() {
     while (!terminated) {
