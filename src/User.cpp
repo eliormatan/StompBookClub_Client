@@ -27,12 +27,6 @@ User::~User() {
     }
     delete openRequests;
     delete openSubUnSubReq;
-    for(pair<string,vector<Book*>*> p:*bookMap){
-        for(Book* book:*p.second){
-            delete book;
-        }
-        delete p.second;
-    }
     delete bookMap;
 }
 

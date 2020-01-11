@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
                     cout << answer << endl;
                 }
             }
-            cout << "Logout Successfully! Exiting.." << endl;
+            cout << "Logout Successfully.." << endl;
             break;
         }
         else{
