@@ -93,7 +93,9 @@ void User::getAllBooks(string &books,string genre) {
         if(genreOfMap.first==genre) {
             vector<Book *> *bookvec = genreOfMap.second;
             for (auto book:*bookvec) {
-                books += book->getName() + string(",");
+                if(book->getIsMineAtTheMoment()) {
+                    books += book->getName() + string(",");
+                }
             }
             books = books.substr(0,books.length()-1);
             return;
