@@ -2,6 +2,9 @@
 // Created by tamirsku@wincs.cs.bgu.ac.il on 07/01/2020.
 //
 #include "../include/KeyBoardTask.h"
+#include <iostream>
+#include <mutex>
+
 
 KeyBoardTask::KeyBoardTask(mutex &mutex, ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
         : _mutex(
@@ -16,12 +19,12 @@ void KeyBoardTask::run() {
         string frameToSend;
         encDec.encode(line, frameToSend);
         if (frameToSend != "") {
-            lock_guard<mutex> lock(mutex);
+            lock_guard<mutex> lock(_mutex);
             if (!_connectionHandler.sendLine(frameToSend)) {
                 std::cout << "Disconnected. Exiting...\n" << std::endl;
                 terminated = true;
             }
-            lock_guard<mutex> unlock(mutex);
+            lock_guard<mutex> unlock(_mutex);
             if (encDec.isDone1())
                 terminated = true;
         }
