@@ -90,7 +90,7 @@ void User::getAllBooks(string &books, string genre) {
                     books += book->getName() + string(",");
                 }
             }
-            if (books.length() > 0)
+            if (books.length() > name.length()+1)
                 books = books.substr(0, books.length() - 1);
             return;
         }
