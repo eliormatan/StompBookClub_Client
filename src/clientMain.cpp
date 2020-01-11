@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
                     cout << answer << endl;
                 }
             }
+            cout << "Logout Successfully! Awaiting other commands now.." << endl;
         }
     }
 

@@ -15,7 +15,25 @@ User::User(string _name, string _password) : name(_name), password(_password), l
 }
 
 User::~User() {
-
+    removeAllSubscribe();
+    delete subscribeByID;
+    vector<RequestBorrow*> vect = *openRequests;
+    for(auto iter = vect.begin();iter!=vect.end();iter++){
+        delete *iter;
+    }
+    vector<RequestSubUnsub*> vect2 = *openSubUnSubReq;
+    for(auto iter = vect2.begin();iter!=vect2.end();iter++){
+        delete *iter;
+    }
+    delete openRequests;
+    delete openSubUnSubReq;
+    for(pair<string,vector<Book*>*> p:*bookMap){
+        for(Book* book:*p.second){
+            delete book;
+        }
+        delete p.second;
+    }
+    delete bookMap;
 }
 
 int User::getRunningID() {

@@ -14,3 +14,7 @@ const string &RequestBorrow::getBookName() const {
 }
 
 RequestBorrow::RequestBorrow(string _genre, string _bookName): genre(_genre), bookName(_bookName) {}
+
+RequestBorrow::~RequestBorrow() {
+
+}

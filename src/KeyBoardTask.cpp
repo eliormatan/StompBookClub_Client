@@ -17,7 +17,7 @@ void KeyBoardTask::run() {
         encDec.encode(line, frameToSend);
         lock_guard<mutex> lock(mutex);
         if (!_connectionHandler.sendLine(frameToSend)) {
-            std::cout << "Disconnected. Exiting... sendline\n" << std::endl;
+            std::cout << "Disconnected. Exiting...\n" << std::endl;
             terminated = true;
         }
         lock_guard<mutex> unlock(mutex);

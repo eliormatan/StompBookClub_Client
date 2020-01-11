@@ -152,7 +152,6 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         int receipt = user.getRunningID();
         user.setLogOutId(receipt);
         user.setIsLoggedOut(true);
-        user.removeAllSubscribe();
         stomp = "DISCONNECT" + string("\n") +
                 "receipt:" + to_string(receipt) + string("\n") +string("\n")+ "\0";
         isDone = true;
