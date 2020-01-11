@@ -96,7 +96,11 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
     vector<string> words;
     SplitThings::splitWords(msg, words);
     string currWord = words[0];
-    if (currWord == "join") {
+    if(currWord == "login"){
+        cout << "Already logged in. If you want to log in to other user, please Log out first." << endl;
+        stomp ="";
+    }
+    else if (currWord == "join") {
         string genre = words[1];
         int id = user.getRunningID();
         int id2 = user.getRunningID();

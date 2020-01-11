@@ -7,8 +7,6 @@
 Book::Book(string _name, string _borrowedFrom): name(_name),borrowedFrom(_borrowedFrom),isMineAtTheMoment(true) {}
 
 Book::~Book() {
-    name = nullptr;
-    borrowedFrom = nullptr;
 }
 
 string Book::getBorrowedFrom() {

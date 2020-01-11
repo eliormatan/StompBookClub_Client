@@ -47,7 +47,6 @@ int main(int argc, char *argv[]) {
                 vector<string> words;
                 SplitThings::split_string(answer, words);
                 if (words[0] == "CONNECTED") {
-//                    loggedIN = true;
                     cout << "Login Succesfuly :)" << endl;
                     KeyBoardTask keyboardTask(sharedMutex, connectionHandler, msgEncoderDecoder);
                     ReadFromSocketTask readFromSocketTask(sharedMutex, connectionHandler, msgEncoderDecoder);
@@ -61,6 +60,9 @@ int main(int argc, char *argv[]) {
                 }
             }
             cout << "Logout Successfully! Awaiting other commands now.." << endl;
+        }
+        else{
+            cout << "Login First before making other commands!" << endl;
         }
     }
 
