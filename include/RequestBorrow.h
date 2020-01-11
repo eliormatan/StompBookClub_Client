@@ -12,6 +12,7 @@ class RequestBorrow {
 private:
     string genre;
     string bookName;
+    bool handled;
 public:
     RequestBorrow(string _genre, string _bookName);
     ~RequestBorrow();
@@ -20,6 +21,10 @@ public:
     const string &getGenre() const;
 
     const string &getBookName() const;
+
+    bool isHandled() const;
+
+    void setHandled(bool handled);
 };
 
 

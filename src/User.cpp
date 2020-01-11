@@ -159,6 +159,9 @@ void User::setIsLoggedOut(bool isLoggedOut) {
 bool User::findRequest(string bookName, string genre, int subscribeID) {
     for (auto req:*openRequests) {
         if (bookName == req->getBookName() && genre == req->getGenre()) {
+            if(req->isHandled())
+                return false;
+            req->setHandled(true);
             return true;
         }
     }
