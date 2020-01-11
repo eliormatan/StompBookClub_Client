@@ -49,6 +49,7 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 }
 
 bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
+    lock_guard<mutex> lock(connectionMU);
     int tmp = 0;
     boost::system::error_code error;
     try {

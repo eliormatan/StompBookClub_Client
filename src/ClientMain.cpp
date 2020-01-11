@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
                 return 1;
             }
             connectionHandler.sendFrameAscii(stomp, '\0');
-            mutex sharedMutex;
             User userLogged(username, password);
             StompMsgEncoderDecoder msgEncoderDecoder(userLogged, connectionHandler);
             std::string answer;
@@ -49,8 +48,8 @@ int main(int argc, char *argv[]) {
                 SplitThings::split_string(answer, words);
                 if (words[0] == "CONNECTED") {
                     cout << "Login Succesfuly :)" << endl;
-                    KeyBoardTask keyboardTask(sharedMutex, connectionHandler, msgEncoderDecoder);
-                    ReadFromSocketTask readFromSocketTask(sharedMutex, connectionHandler, msgEncoderDecoder);
+                    KeyBoardTask keyboardTask( connectionHandler, msgEncoderDecoder);
+                    ReadFromSocketTask readFromSocketTask(connectionHandler, msgEncoderDecoder);
                     thread t1(&KeyBoardTask::run, &keyboardTask);
                     thread t2(&ReadFromSocketTask::run, &readFromSocketTask);
                     t1.join();

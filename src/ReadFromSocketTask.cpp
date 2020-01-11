@@ -1,8 +1,8 @@
 
 #include "../include/ReadFromSocketTask.h"
 
-ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler,
-                                       StompMsgEncoderDecoder _encDec) : _mutex(mutex),
+ReadFromSocketTask::ReadFromSocketTask(ConnectionHandler &connectionHandler,
+                                       StompMsgEncoderDecoder _encDec) :
                                                                          _connectionHandler(
                                                                                  connectionHandler),
                                                                          terminated(false),
@@ -18,9 +18,7 @@ void ReadFromSocketTask::run() {  //todo
         string decodedAns = encDec.decode(answer);
         if (decodedAns != "") {
             if (decodedAns != "letMeOut!") {
-                lock_guard<mutex> lock(mutex);
                 _connectionHandler.sendLine(decodedAns);
-                lock_guard<mutex> unlock(mutex);
             }
             else terminated=true;
         }
