@@ -53,7 +53,7 @@ void User::addBookToInventory(string bookName, string genre, string borrowedFrom
     map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
     if (iter != bookMap->end()) {
         vector<Book *> *vectorToInsert = iter->second;
-        if (!findBook(genre, bookName)) {
+        if (!findBook(genre, bookName) && !findInInventory(genre,bookName)) {
             iter->second->insert(iter->second->begin(), new Book(bookName, borrowedFrom));
         } else {
             for (Book *book:*vectorToInsert) {
@@ -113,6 +113,19 @@ void User::getAllBooks(string &books, string genre) {
             return;
         }
     }
+}
+
+bool User::findInInventory(string genre, string bookName) {
+    map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
+    if (iter != bookMap->end()) {
+        for (unsigned int i = 0; i < iter->second->size(); i++) {
+            if ((iter->second->at(i)->getName() == bookName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return false;
 }
 
 bool User::findBook(string genre, string bookName) {

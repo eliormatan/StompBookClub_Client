@@ -44,6 +44,7 @@ public:
     int getSubscribeIDbyTopic(string genre);
     bool removeRequest(string bookName,string genre,int subscribeID);
     bool findBook(string genre,string bookName);
+    bool findInInventory(string genre,string bookName);
     bool findRequest(string bookName,string genre,int subscribeID);
     bool getisLoggedOut() const;
     RequestSubUnsub* getReqByRecipt(int receiptID);
