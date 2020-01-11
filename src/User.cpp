@@ -129,6 +129,7 @@ bool User::removeRequest(string bookName, string genre, int subscribeID) {
     for (auto req:*openRequests) {
         if (bookName == req->getBookName() && genre == req->getGenre()) {
             openRequests->erase(std::find(openRequests->begin(), openRequests->end(), req));
+            delete req;
             return true;
         }
     }

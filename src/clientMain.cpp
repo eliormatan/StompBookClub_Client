@@ -22,7 +22,8 @@ int main(int argc, char *argv[]) {
         vector<string> words;
         SplitThings::splitWords(action, words);
         string currWord = words[0];
-        if (currWord == "login") {
+        if (currWord == "bye") { break; }
+        else if (currWord == "login") {
             int seperate = words[1].find(':');
             string host = words[1].substr(0, seperate);
             string port = words[1].substr(seperate + 1, words[1].length() - 1);
@@ -60,8 +61,7 @@ int main(int argc, char *argv[]) {
                 }
             }
             cout << "Logout Successfully.. Awaiting another Commands!" << endl;
-        }
-        else{
+        } else {
             cout << "Login First before making other commands!" << endl;
         }
     }

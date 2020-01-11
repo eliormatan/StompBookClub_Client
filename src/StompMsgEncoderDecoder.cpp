@@ -38,6 +38,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
             else{
                 cout<<"Joined Club "+req->getGenre()<<endl;
             }
+            delete req;
 
         }
     } else if (lines[0] == "MESSAGE") {
