@@ -41,19 +41,19 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
 
         }
     } else if (lines[0] == "MESSAGE") {
-        if (lines[4] == "book status") {
+        if (lines[5] == "book status") {
             string genre = lines[3].substr(12);
             cout << genre + ":book status" << endl;
             string allBooks;
             user.getAllBooks(allBooks, genre);
             readyStomp = "SEND" + string("\n") +
-                         "destination:" + genre + string("\n") +
+                         "destination:" + genre + string("\n") + "\n"+
                          allBooks + "\n" + "\0";
         } else {
             vector<string> splited;
-            SplitThings::splitWords(lines[4], splited);
+            SplitThings::splitWords(lines[5], splited);
             string genre = lines[3].substr(12);
-            cout << genre + ":" + lines[4] << endl;
+            cout << genre + ":" + lines[5] << endl;
             if (splited[0] == "Returning") {
                 if (splited[3] == user.getName()) {
                     user.addBookToInventory(splited[1], genre, user.getName());
@@ -62,7 +62,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                 string book = splited[4];
                 if (user.findBook(genre, book)) {
                     readyStomp = "SEND" + string("\n") +
-                                 "destination:" + genre + string("\n") +
+                                 "destination:" + genre + string("\n") +string("\n")+
                                  user.getName() + " has " + book + string("\n") + "\0";
                 }
             } else if (splited.size() >= 2 && splited[1] == "has") {
@@ -71,7 +71,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                 int subscribeID = stoi(lines[1].substr(13));
                 if (user.findRequest(book, genre, subscribeID)) {
                     readyStomp = "SEND" + string("\n") +
-                                 "destination:" + genre + string("\n") +
+                                 "destination:" + genre + string("\n") + string("\n")+
                                  "Taking " + book + " from " + owner + string("\n") + "\0";
                 }
             } else if (splited[0] == "Taking") {
@@ -103,7 +103,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         stomp = "SUBSCRIBE" + string("\n") +
                 "destination:" + genre + string("\n") +
                 "id:" + to_string(id) + string("\n") +
-                "receipt:" + to_string(id2) + string("\n") + "\0";
+                "receipt:" + to_string(id2) + string("\n") + string("\n")+ "\0";
         user.subscribeWithID(genre, id);
         RequestSubUnsub* req = new RequestSubUnsub(id2,id,genre,"sub");
         user.insertSubUnsubReq(req);
@@ -111,7 +111,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         string genre = words[1];
         int id = user.getSubscribeIDbyTopic(genre);
         stomp = "UNSUBSCRIBE" + string("\n") +
-                "id:" + to_string(id) + string("\n") + "\0";
+                "id:" + to_string(id) + string("\n") +string("\n") + "\0";
         RequestSubUnsub* req = new RequestSubUnsub(id,-1,genre,"unsub");
         user.insertSubUnsubReq(req);
 
@@ -120,13 +120,13 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         string bookName = words[2];
         user.addBookToInventory(bookName, genre, user.getName());
         stomp = "SEND" + string("\n") +
-                "destination:" + genre + string("\n") +
+                "destination:" + genre + string("\n") + string("\n")+
                 user.getName() + " has added the book " + bookName + string("\n") + "\0";
     } else if (currWord == "borrow") {
         string genre = words[1];
         string bookName = words[2];
         stomp = "SEND" + string("\n") +
-                "destination:" + genre + string("\n") +
+                "destination:" + genre + string("\n") + string("\n")+
                 user.getName() + " wish to borrow " + bookName + string("\n") + "\0";
         RequestBorrow *request = new RequestBorrow(genre, bookName);
         user.addRequest(request);
@@ -139,14 +139,14 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
             cout << "Book Is Not Yours! :(" << endl;
         } else {
             stomp = "SEND" + string("\n") +
-                    "destination:" + genre + string("\n") +
+                    "destination:" + genre + string("\n") + string("\n")+
                     "Returning " + bookName + " to " + bookLender + string("\n") + "\0";
 
         }
     } else if (currWord == "status") {
         string genre = words[1];
         stomp = "SEND" + string("\n") +
-                "destination:" + genre + string("\n") +
+                "destination:" + genre + string("\n") + string("\n")+
                 "book status" + string("\n") + "\0";
     } else if (currWord == "logout") {
         int receipt = user.getRunningID();
@@ -154,7 +154,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         user.setIsLoggedOut(true);
         user.removeAllSubscribe();
         stomp = "DISCONNECT" + string("\n") +
-                "receipt:" + to_string(receipt) + string("\n") + "\0";
+                "receipt:" + to_string(receipt) + string("\n") +string("\n")+ "\0";
         isDone = true;
     }
 }
