@@ -61,13 +61,10 @@ string User::removeBookFromInventory(string genre, string bookName) {
                 string ownerName = currBook->getBorrowedFrom();
                 currBook->setIsMineAtTheMoment(false);
                 return ownerName;
-            } else {
-                return "BookError";
             }
         }
-
-        return "BookError";
     }
+    return "BookError";
 }
 
 void User::removeAllSubscribe() {
