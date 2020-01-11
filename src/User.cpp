@@ -9,7 +9,8 @@
 User::User(string _name, string _password) : name(_name), password(_password), logOutID(-1), isLoggedOut(false) {
     bookMap = new map<string, vector<Book *> *>();
     subscribeByID = new map<string, int>();
-    openRequests = new vector<Requests *>();
+    openRequests = new vector<RequestBorrow *>();
+    openSubUnSubReq = new vector<RequestSubUnsub*>();
     runningID = 0;
 }
 
@@ -109,7 +110,7 @@ bool User::findBook(string genre, string bookName) {
     }
 }
 
-void User::addRequest(Requests *requests) {
+void User::addRequest(RequestBorrow *requests) {
     openRequests->push_back(requests);
 }
 
@@ -151,6 +152,20 @@ bool User::findRequest(string bookName, string genre, int subscribeID) {
     }
     return false;
 
+}
+
+void User::insertSubUnsubReq(RequestSubUnsub *req) {
+    openSubUnSubReq->push_back(req);
+}
+
+RequestSubUnsub *User::getReqByRecipt(int receiptID) {
+    for (auto req:*openSubUnSubReq) {
+        if (receiptID == req->getReceiptId()) {
+            openSubUnSubReq->erase(std::find(openSubUnSubReq->begin(), openSubUnSubReq->end(), req));
+            return req;
+        }
+    }
+    return nullptr;
 }
 
 

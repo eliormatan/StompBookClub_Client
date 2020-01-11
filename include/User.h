@@ -8,7 +8,8 @@
 #include <map>
 #include <vector>
 #include "Book.h"
-#include "Requests.h"
+#include "RequestBorrow.h"
+#include "RequestSubUnsub.h"
 
 using namespace std;
 
@@ -16,33 +17,35 @@ class User {
 private:
     map<string,vector<Book*>*>* bookMap;
     map<string,int>* subscribeByID;
-    vector<Requests *>* openRequests;
+    vector<RequestBorrow *>* openRequests;
+    vector<RequestSubUnsub*>* openSubUnSubReq;
     int runningID;
     int logOutID;
-private:
     string name;
     string password;
     bool isLoggedOut;
 public:
     User(string name,string password);
     ~User();
-    string removeBookFromInventory(string genre,string bookName); //return the bookOwner
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
     void getAllBooks(string& books,string genre);
-    void addRequest(Requests* requests);
+    void addRequest(RequestBorrow* requests);
     void setLogOutId(int logOutId);
     void setIsLoggedOut(bool isLoggedOut);
+    void insertSubUnsubReq(RequestSubUnsub* req);
     int getRunningID();
+    int getLogOutId() const;
     int getSubscribeIDbyTopic(string genre);
     bool removeRequest(string bookName,string genre,int subscribeID);
     bool findBook(string genre,string bookName);
     bool findRequest(string bookName,string genre,int subscribeID);
+    bool getisLoggedOut() const;
+    RequestSubUnsub* getReqByRecipt(int receiptID);
     string getName();
     string getPassword();
-    int getLogOutId() const;
-    bool getisLoggedOut() const;
+    string removeBookFromInventory(string genre,string bookName); //return the bookOwner
 
 };
 

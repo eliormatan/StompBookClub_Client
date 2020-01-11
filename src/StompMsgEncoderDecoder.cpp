@@ -24,10 +24,21 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
     SplitThings::split_string(stomp, lines);
     string readyStomp = "";
     if (lines[0] == "RECEIPT") {
-        if (stoi(lines[1].substr(11)) == user.getLogOutId() & user.getisLoggedOut()) {
+        int receiptID =  stoi(lines[1].substr(11));
+        if (receiptID == user.getLogOutId() & user.getisLoggedOut()) { //Logout
             connect.close();
             cout << "Disconnecting..." << endl;
             readyStomp = "letMeOut!";
+        }
+        else{
+            RequestSubUnsub* req = user.getReqByRecipt(receiptID);
+            if(req->getSubId() == -1){
+                cout<< "Exited Club "+req->getGenre()<<endl;
+            }
+            else{
+                cout<<"Joined Club "+req->getGenre()<<endl;
+            }
+
         }
     } else if (lines[0] == "MESSAGE") {
         if (lines[4] == "book status") {
@@ -94,13 +105,16 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
                 "id:" + to_string(id) + string("\n") +
                 "receipt:" + to_string(id2) + string("\n") + "\0";
         user.subscribeWithID(genre, id);
-        cout << "Joined club " + genre << endl;
+        RequestSubUnsub* req = new RequestSubUnsub(id2,id,genre,"sub");
+        user.insertSubUnsubReq(req);
     } else if (currWord == "exit") {
         string genre = words[1];
         int id = user.getSubscribeIDbyTopic(genre);
         stomp = "UNSUBSCRIBE" + string("\n") +
                 "id:" + to_string(id) + string("\n") + "\0";
-        cout << "Exited club " + genre << endl;
+        RequestSubUnsub* req = new RequestSubUnsub(id,-1,genre,"unsub");
+        user.insertSubUnsubReq(req);
+
     } else if (currWord == "add") {
         string genre = words[1];
         string bookName = words[2];
@@ -114,7 +128,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         stomp = "SEND" + string("\n") +
                 "destination:" + genre + string("\n") +
                 user.getName() + " wish to borrow " + bookName + string("\n") + "\0";
-        Requests *request = new Requests(genre, bookName);
+        RequestBorrow *request = new RequestBorrow(genre, bookName);
         user.addRequest(request);
     } else if (currWord == "return") {
         string genre = words[1];
