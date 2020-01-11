@@ -6,11 +6,11 @@
 #include "../include/User.h"
 
 
-User::User(string _name,string _password):name(_name),password(_password),logOutID(-1),isLoggedOut(false) {
-    bookMap = new map<string,vector<Book*>*>();
-    subscribeByID = new map<string,int>();
-    openRequests = new vector<Requests*>();
-    runningID=0;
+User::User(string _name, string _password) : name(_name), password(_password), logOutID(-1), isLoggedOut(false) {
+    bookMap = new map<string, vector<Book *> *>();
+    subscribeByID = new map<string, int>();
+    openRequests = new vector<Requests *>();
+    runningID = 0;
 }
 
 User::~User() {
@@ -30,34 +30,31 @@ string User::getPassword() {
 }
 
 
-
 void User::addBookToInventory(string bookName, string genre, string borrowedFrom) {
 //    Book newBook(bookName,borrowedFrom);
-    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
-    if(iter!=bookMap->end()){
-        vector<Book*>* vectorToInsert = iter->second;
-        if(!findBook(genre,bookName)) {
+    map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
+    if (iter != bookMap->end()) {
+        vector<Book *> *vectorToInsert = iter->second;
+        if (!findBook(genre, bookName)) {
             iter->second->insert(iter->second->begin(), new Book(bookName, borrowedFrom));
-        }
-        else{
-            for(Book *book:*vectorToInsert){
-                if(book->getName()==bookName) {
+        } else {
+            for (Book *book:*vectorToInsert) {
+                if (book->getName() == bookName) {
                     book->setIsMineAtTheMoment(true);
                     break;
                 }
             }
         }
-    }
-    else{
-        vector<Book*>* vectorToInsert = new vector<Book*>();
-        vectorToInsert->insert(vectorToInsert->begin(),new Book(bookName,borrowedFrom));
-        bookMap->insert(bookMap->begin(),pair<string,vector<Book*>*>(genre,vectorToInsert));
+    } else {
+        vector<Book *> *vectorToInsert = new vector<Book *>();
+        vectorToInsert->insert(vectorToInsert->begin(), new Book(bookName, borrowedFrom));
+        bookMap->insert(bookMap->begin(), pair<string, vector<Book *> *>(genre, vectorToInsert));
     }
 }
 
 string User::removeBookFromInventory(string genre, string bookName) {
-    map<string,vector<Book*>*>::iterator iter = bookMap->find(genre);
-    if(iter!=bookMap->end()) {
+    map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
+    if (iter != bookMap->end()) {
         for (int i = 0; i < iter->second->size(); i++) {
             Book *currBook = iter->second->at(i);
             if (currBook->getName() == bookName & currBook->getIsMineAtTheMoment()) {
@@ -74,9 +71,8 @@ string User::removeBookFromInventory(string genre, string bookName) {
 }
 
 void User::removeAllSubscribe() {
-    for(map<string,vector<Book*>*>::iterator iter=bookMap->begin();iter!=bookMap->end();iter++){
-        for(int i=0;i<iter->second->size();i++)
-        {
+    for (map<string, vector<Book *> *>::iterator iter = bookMap->begin(); iter != bookMap->end(); iter++) {
+        for (int i = 0; i < iter->second->size(); i++) {
             delete iter->second->at(i);
         }
         delete (iter->second);
@@ -84,21 +80,21 @@ void User::removeAllSubscribe() {
 }
 
 void User::subscribeWithID(string genre, int subscribeID) {
-    subscribeByID->insert(pair<string,int>(genre,subscribeID));
+    subscribeByID->insert(pair<string, int>(genre, subscribeID));
 }
 
-void User::getAllBooks(string &books,string genre) {
-    books+=name+string(":");
-    for(auto genreOfMap:*bookMap){
-        if(genreOfMap.first==genre) {
+void User::getAllBooks(string &books, string genre) {
+    books += name + string(":");
+    for (auto genreOfMap:*bookMap) {
+        if (genreOfMap.first == genre) {
             vector<Book *> *bookvec = genreOfMap.second;
             for (auto book:*bookvec) {
-                if(book->getIsMineAtTheMoment()) {
+                if (book->getIsMineAtTheMoment()) {
                     books += book->getName() + string(",");
                 }
             }
-            if(books.length()>0)
-            books = books.substr(0,books.length()-1);
+            if (books.length() > 0)
+                books = books.substr(0, books.length() - 1);
             return;
         }
     }
@@ -121,9 +117,8 @@ void User::addRequest(Requests *requests) {
 }
 
 bool User::removeRequest(string bookName, string genre, int subscribeID) {
-    for(auto req:*openRequests){
-        if(bookName==req->getBookName()&&genre==req->getGenre())
-        {
+    for (auto req:*openRequests) {
+        if (bookName == req->getBookName() && genre == req->getGenre()) {
             openRequests->erase(std::find(openRequests->begin(), openRequests->end(), req));
             return true;
         }
@@ -152,9 +147,8 @@ void User::setIsLoggedOut(bool isLoggedOut) {
 }
 
 bool User::findRequest(string bookName, string genre, int subscribeID) {
-    for(auto req:*openRequests){
-        if(bookName==req->getBookName()&&genre==req->getGenre())
-        {
+    for (auto req:*openRequests) {
+        if (bookName == req->getBookName() && genre == req->getGenre()) {
             return true;
         }
     }
