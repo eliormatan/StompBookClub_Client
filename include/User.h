@@ -27,6 +27,7 @@ private:
 public:
     User(string name,string password);
     ~User();
+    User& operator=(const User &other);
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
@@ -35,6 +36,7 @@ public:
     void setLogOutId(int logOutId);
     void setIsLoggedOut(bool isLoggedOut);
     void insertSubUnsubReq(RequestSubUnsub* req);
+    void clean();
     int getRunningID();
     int getLogOutId() const;
     int getSubscribeIDbyTopic(string genre);

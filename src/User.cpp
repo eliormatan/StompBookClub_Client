@@ -14,7 +14,22 @@ User::User(string _name, string _password) : name(_name), password(_password), l
     runningID = 0;
 }
 
+User &User::operator=(const User &other) { //Copy Operator
+    if(this!=&other){
+        clean();
+        this->bookMap = other.bookMap;
+        this->subscribeByID = other.subscribeByID;
+        this->openRequests = other.openRequests;
+        this->openSubUnSubReq = other.openSubUnSubReq;
+        this->runningID = other.runningID;
+    }
+    return (*this);
+}
 User::~User() {
+    clean();
+}
+
+void User::clean(){
     removeAllSubscribe();
     delete subscribeByID;
     vector<RequestBorrow*> vect = *openRequests;
@@ -29,7 +44,6 @@ User::~User() {
     delete openSubUnSubReq;
     delete bookMap;
 }
-
 int User::getRunningID() {
     return runningID++;
 }
