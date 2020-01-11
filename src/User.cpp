@@ -44,7 +44,6 @@ string User::getPassword() {
 
 
 void User::addBookToInventory(string bookName, string genre, string borrowedFrom) {
-//    Book newBook(bookName,borrowedFrom);
     map<string, vector<Book *> *>::iterator iter = bookMap->find(genre);
     if (iter != bookMap->end()) {
         vector<Book *> *vectorToInsert = iter->second;

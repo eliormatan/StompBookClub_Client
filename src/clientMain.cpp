@@ -59,8 +59,7 @@ int main(int argc, char *argv[]) {
                     cout << answer << endl;
                 }
             }
-            cout << "Logout Successfully.." << endl;
-            break;
+            cout << "Logout Successfully.. Awaiting another Commands!" << endl;
         }
         else{
             cout << "Login First before making other commands!" << endl;
