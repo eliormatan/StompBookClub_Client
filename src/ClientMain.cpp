@@ -17,6 +17,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
 //    bool loggedIN = false;
     while (true) {
+        mutex connectionMu;
         string action, subAction;
         std::getline(std::cin, action);
         vector<string> words;
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) {
                            "host:stomp.cs.bgu.ac.il" + string("\n") +
                            "login:" + username + string("\n") +
                            "passcode:" + password + string("\n") + "\0";
-            ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port));
+            ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port),connectionMu);
             if (!connectionHandler.connect()) {
                 std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
                 return 1;

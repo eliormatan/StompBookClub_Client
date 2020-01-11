@@ -9,7 +9,8 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_){}
+ConnectionHandler::ConnectionHandler(string host, short port,mutex& _connectionMu): host_(host), port_(port), io_service_(), socket_(io_service_),connectionMu(_connectionMu) {
+}
 
 ConnectionHandler::~ConnectionHandler() {
     close();
@@ -49,7 +50,7 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 }
 
 bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
-    lock_guard<mutex> lock(connectionMU);
+    lock_guard<mutex> lock(connectionMu);
     int tmp = 0;
     boost::system::error_code error;
     try {
