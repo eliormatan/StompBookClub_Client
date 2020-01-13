@@ -57,10 +57,11 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
             cout << genre + ":" + lines[5] << endl;
             if (splited[0] == "Returning") {
                 if (splited[3] == user.getName()) {
-                    user.addBookToInventory(splited[1], genre, user.getName());
+                    string book = SplitThings::getBookName(1,findIndexOfWord(splited,"to")-1,splited);
+                    user.addBookToInventory(book, genre, user.getName());
                 }
             } else if (splited.size() >= 4 && splited[3] == "borrow") {
-                string book = splited[4];
+                string book = SplitThings::getBookName(4,splited.size()-1,splited);
                 if (user.findBook(genre, book)) {
                     readyStomp = "SEND" + string("\n") +
                                  "destination:" + genre + string("\n") +string("\n")+
@@ -68,7 +69,7 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                 }
             } else if (splited.size() >= 2 && splited[1] == "has") {
                 string owner = splited[0];
-                string book = splited[2];
+                string book = SplitThings::getBookName(2,splited.size()-1,splited);
                 int subscribeID = stoi(lines[1].substr(13));
                 if (user.findRequest(book, genre, subscribeID)) {
                     readyStomp = "SEND" + string("\n") +
@@ -77,12 +78,13 @@ string StompMsgEncoderDecoder::decode(string stomp) {   //todo
                 }
             } else if (splited[0] == "Taking") {
                 if (splited[3] == user.getName()) {
-                    user.removeBookFromInventory(genre, splited[1]);
+                    string book = SplitThings::getBookName(1,findIndexOfWord(splited,"from")-1,splited);
+                    user.removeBookFromInventory(genre, book);
                 } else {
-                    string bookname = splited[1];
+                    string bookName = SplitThings::getBookName(1,findIndexOfWord(splited,"from")-1,splited);
                     int subscribeID = stoi(lines[1].substr(13));
-                    if (user.removeRequest(bookname, genre, subscribeID)) {
-                        user.addBookToInventory(bookname, genre, splited[3]);
+                    if (user.removeRequest(bookName, genre, subscribeID)) {
+                        user.addBookToInventory(bookName, genre, splited[3]);
 
                     }
                 }
@@ -122,14 +124,16 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
 
     } else if (currWord == "add") {
         string genre = words[1];
-        string bookName = words[2];
+        string bookName = SplitThings::getBookName(2,words.size()-1,words);
+//        string bookName = words[2];
         user.addBookToInventory(bookName, genre, user.getName());
         stomp = "SEND" + string("\n") +
                 "destination:" + genre + string("\n") + string("\n")+
                 user.getName() + " has added the book " + bookName + string("\n") + "\0";
     } else if (currWord == "borrow") {
         string genre = words[1];
-        string bookName = words[2];
+        string bookName = SplitThings::getBookName(2,words.size()-1,words);
+//        string bookName = words[2];
         stomp = "SEND" + string("\n") +
                 "destination:" + genre + string("\n") + string("\n")+
                 user.getName() + " wish to borrow " + bookName + string("\n") + "\0";
@@ -137,7 +141,8 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         user.addRequest(request);
     } else if (currWord == "return") {
         string genre = words[1];
-        string bookName = words[2];
+        string bookName = SplitThings::getBookName(2,words.size()-1,words);
+//        string bookName = words[2];
         string bookLender = user.removeBookFromInventory(genre,
                                                          bookName);    //remove book returns the name of the lender
         if (bookLender == "BookError") {
@@ -165,4 +170,15 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
 
 bool StompMsgEncoderDecoder::isDone1() const {
     return isDone;
+}
+
+int StompMsgEncoderDecoder::findIndexOfWord(vector<string>& words,string word) {
+    int i =0;
+    for(string str:words){
+        if(str==word){
+            return i;
+        }
+        i++;
+    }
+    return -1;
 }

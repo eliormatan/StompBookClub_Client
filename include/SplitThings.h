@@ -14,6 +14,7 @@ class SplitThings {
 public:
     static void split_string(const string& str,vector<string> & strings);
     static void splitWords(string line,vector<string> & words);
+    static string getBookName(int start,int end,vector<string>& words);
 };
 
 
