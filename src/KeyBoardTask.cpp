@@ -6,9 +6,8 @@
 #include <mutex>
 
 
-KeyBoardTask::KeyBoardTask(mutex &mutex, ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
-        : _mutex(
-        mutex), _connectionHandler(connectionHandler),encDec(encDec1), terminated(false)  {}
+KeyBoardTask::KeyBoardTask( ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
+        : _connectionHandler(connectionHandler),encDec(encDec1), terminated(false)  {}
 
 void KeyBoardTask::run() {
     while (!terminated) {
@@ -19,12 +18,10 @@ void KeyBoardTask::run() {
         string frameToSend;
         encDec.encode(line, frameToSend);
         if (frameToSend != "") {
-            lock_guard<mutex> lock(_mutex);
             if (!_connectionHandler.sendLine(frameToSend)) {
                 std::cout << "Disconnected. Exiting...\n" << std::endl;
                 terminated = true;
             }
-            lock_guard<mutex> unlock(_mutex);
             if (encDec.isDone1())
                 terminated = true;
         }

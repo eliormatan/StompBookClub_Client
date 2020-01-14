@@ -10,7 +10,7 @@ User::User(string _name, string _password) : bookMap(new map<string, vector<Book
                                              subscribeByID(new map<string, int>()),
                                              openRequests(new vector<RequestBorrow *>()),
                                              openSubUnSubReq(new vector<RequestSubUnsub *>()), runningID(0),
-                                             logOutID(-1), name(_name), password(_password), isLoggedOut(false) {}
+                                             logOutID(-1), name(_name), password(_password), isLoggedOut(false),totalUnSub(0) {}
 
 User &User::operator=(const User &other) { //Copy Operator
     if (this != &other) {
@@ -221,5 +221,24 @@ void User::copy(const User &other) {
     this->password = other.password;
     this->isLoggedOut = other.isLoggedOut;
 }
+
+void User::getAllTopics(vector<string> &topics) {
+    for(map<string, int>::iterator it = subscribeByID->begin(); it != subscribeByID->end(); ++it) {
+        topics.push_back(it->first);
+    }
+}
+
+int User::getTotalUnSub() const {
+    return totalUnSub;
+}
+
+void User::increaseUnSub() {
+    totalUnSub++;
+}
+
+bool User::checkIfDone(int total) {
+    return (total==totalUnSub);
+}
+
 
 

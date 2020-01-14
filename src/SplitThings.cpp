@@ -31,6 +31,8 @@
 string SplitThings::getBookName(int start, int end, vector<string> &words) {
     string name = "";
     for(int i=start;i<=end;i++){
-        name+=words[i];
+        name+=words[i]+" ";
     }
+    name= name.substr(0,name.length()-1);
+    return name;
 }

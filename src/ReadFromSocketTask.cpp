@@ -3,14 +3,14 @@
 #include <iostream>
 #include <mutex>
 
-ReadFromSocketTask::ReadFromSocketTask(mutex &mutex, ConnectionHandler &connectionHandler,
-                                       StompMsgEncoderDecoder _encDec) : _mutex(mutex),
+ReadFromSocketTask::ReadFromSocketTask(ConnectionHandler &connectionHandler,
+                                       StompMsgEncoderDecoder& _encDec) :
                                                                          _connectionHandler(
                                                                                  connectionHandler),
                                                                          terminated(false),
                                                                          encDec(_encDec) {}
 
-void ReadFromSocketTask::run() {  //todo
+void ReadFromSocketTask::run() {
     while (!terminated) {
         std::string answer;
         if (!_connectionHandler.getLine(answer)) {
@@ -20,9 +20,7 @@ void ReadFromSocketTask::run() {  //todo
         string decodedAns = encDec.decode(answer);
         if (decodedAns != "") {
             if (decodedAns != "letMeOut!") {
-                lock_guard<mutex> lock(_mutex);
                 _connectionHandler.sendLine(decodedAns);
-                lock_guard<mutex> unlock(_mutex);
             }
             else terminated=true;
         }

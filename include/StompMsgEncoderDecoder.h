@@ -9,6 +9,8 @@
 #include "connectionHandler.h"
 #include <string>
 #include <vector>
+#include <mutex>
+#include <condition_variable>
 
 using namespace std;
 
@@ -18,12 +20,18 @@ StompMsgEncoderDecoder(User& user1,ConnectionHandler& _connect);
 ~StompMsgEncoderDecoder();
 string decode(string stomp);    //decode stomp frame to stomp frame response
 void encode(string msg,string &stomp);
+void onUnsub(string genre,int unSubID,string& stomp);
+void onJoin(string genre,int subID,int recipetID,string& stomp);
 bool isDone1() const;
 int findIndexOfWord(vector<string>& words,string word);
+
 private:
     User& user;
     ConnectionHandler& connect;
     bool isDone;
+    bool subFinished;
+    mutex lock1;
+    condition_variable cond;
 };
 
 
