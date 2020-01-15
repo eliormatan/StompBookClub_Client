@@ -158,7 +158,7 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
         user.setIsLoggedOut(true);
         vector<string> topics;
         user.getAllTopics(topics);
-        int start = user.getTotalUnSub();
+        unsigned int start = user.getTotalUnSub();
         for (auto topic:topics) {
             string exitStomp = "";
             onUnsub(topic, user.getSubscribeIDbyTopic(topic), exitStomp);
