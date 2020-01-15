@@ -208,7 +208,7 @@ User::User(const User &other) : bookMap(other.bookMap),
                                 subscribeByID(other.subscribeByID),
                                 openRequests(other.openRequests),
                                 openSubUnSubReq(other.openSubUnSubReq), runningID(other.runningID),
-                                logOutID(other.logOutID), name(other.name), password(other.password), isLoggedOut(other.isLoggedOut) {}
+                                logOutID(other.logOutID), name(other.name), password(other.password), isLoggedOut(other.isLoggedOut),totalUnSub(0) {}
 
 void User::copy(const User &other) {
     this->bookMap = other.bookMap;
@@ -220,6 +220,7 @@ void User::copy(const User &other) {
     this->name = other.name;
     this->password = other.password;
     this->isLoggedOut = other.isLoggedOut;
+    this->totalUnSub = 0;
 }
 
 void User::getAllTopics(vector<string> &topics) {
@@ -228,16 +229,12 @@ void User::getAllTopics(vector<string> &topics) {
     }
 }
 
-int User::getTotalUnSub() const {
+unsigned int User::getTotalUnSub() const {
     return totalUnSub;
 }
 
 void User::increaseUnSub() {
     totalUnSub++;
-}
-
-bool User::checkIfDone(int total) {
-    return (total==totalUnSub);
 }
 
 

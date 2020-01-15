@@ -22,14 +22,11 @@ private:
     vector<RequestSubUnsub*>* openSubUnSubReq;
     int runningID;
     int logOutID;
-    std::atomic<int> totalUnSub;
-public:
-    int getTotalUnSub() const;
-
-private:
     string name;
     string password;
     bool isLoggedOut;
+    std::atomic<unsigned int> totalUnSub;
+
 public:
     User(string name,string password);
     User(const User &other);
@@ -47,10 +44,10 @@ public:
     void getAllTopics(vector<string>& topics);
     void clean();
     void increaseUnSub();
-    bool checkIfDone(int total);
     int getRunningID();
     int getLogOutId() const;
     int getSubscribeIDbyTopic(string genre);
+    unsigned int getTotalUnSub() const;
     bool removeRequest(string bookName,string genre,int subscribeID);
     bool findBook(string genre,string bookName);
     bool findInInventory(string genre,string bookName);
