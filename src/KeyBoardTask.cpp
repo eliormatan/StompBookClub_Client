@@ -2,8 +2,11 @@
 // Created by tamirsku@wincs.cs.bgu.ac.il on 07/01/2020.
 //
 #include "../include/KeyBoardTask.h"
+#include <iostream>
+#include <mutex>
 
-KeyBoardTask::KeyBoardTask(ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
+
+KeyBoardTask::KeyBoardTask( ConnectionHandler &connectionHandler, StompMsgEncoderDecoder &encDec1)
         : _connectionHandler(connectionHandler),encDec(encDec1), terminated(false)  {}
 
 void KeyBoardTask::run() {

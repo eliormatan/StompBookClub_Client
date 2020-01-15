@@ -14,7 +14,7 @@ using namespace std;
 class KeyBoardTask {
 private:
     ConnectionHandler &_connectionHandler;
-    StompMsgEncoderDecoder encDec;
+    StompMsgEncoderDecoder& encDec;
     bool terminated;
 public:
     KeyBoardTask(ConnectionHandler& connectionHandler,StompMsgEncoderDecoder& encDec1);

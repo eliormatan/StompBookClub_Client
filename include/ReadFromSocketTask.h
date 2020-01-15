@@ -16,9 +16,9 @@ class ReadFromSocketTask {    //will used by thread2
 private:
     ConnectionHandler &_connectionHandler;
     bool terminated;
-    StompMsgEncoderDecoder encDec;
+    StompMsgEncoderDecoder& encDec;
 public:
-    ReadFromSocketTask(ConnectionHandler& connectionHandler,StompMsgEncoderDecoder _encDec);
+    ReadFromSocketTask(ConnectionHandler& connectionHandler,StompMsgEncoderDecoder& _encDec);
     void run();
 };
 #endif //BOOST_ECHO_CLIENT2_READFROMSOCKETTASK_H

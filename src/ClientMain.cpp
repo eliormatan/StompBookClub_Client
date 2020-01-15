@@ -17,7 +17,6 @@ using namespace std;
 int main(int argc, char *argv[]) {
 //    bool loggedIN = false;
     while (true) {
-        mutex connectionMu;
         string action, subAction;
         std::getline(std::cin, action);
         vector<string> words;
@@ -25,6 +24,7 @@ int main(int argc, char *argv[]) {
         string currWord = words[0];
         if (currWord == "bye") { break; }
         else if (currWord == "login") {
+            mutex connectMutex;
             int seperate = words[1].find(':');
             string host = words[1].substr(0, seperate);
             string port = words[1].substr(seperate + 1, words[1].length() - 1);
@@ -35,12 +35,13 @@ int main(int argc, char *argv[]) {
                            "host:stomp.cs.bgu.ac.il" + string("\n") +
                            "login:" + username + string("\n") +
                            "passcode:" + password + string("\n") + "\0";
-            ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port),connectionMu);
+            ConnectionHandler connectionHandler(host, boost::lexical_cast<short>(port));
             if (!connectionHandler.connect()) {
                 std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
                 return 1;
             }
             connectionHandler.sendFrameAscii(stomp, '\0');
+            mutex encDecMutex;
             User userLogged(username, password);
             StompMsgEncoderDecoder msgEncoderDecoder(userLogged, connectionHandler);
             std::string answer;
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
                 SplitThings::split_string(answer, words);
                 if (words[0] == "CONNECTED") {
                     cout << "Login Succesfuly :)" << endl;
-                    KeyBoardTask keyboardTask( connectionHandler, msgEncoderDecoder);
+                    KeyBoardTask keyboardTask(connectionHandler, msgEncoderDecoder);
                     ReadFromSocketTask readFromSocketTask(connectionHandler, msgEncoderDecoder);
                     thread t1(&KeyBoardTask::run, &keyboardTask);
                     thread t2(&ReadFromSocketTask::run, &readFromSocketTask);

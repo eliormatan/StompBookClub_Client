@@ -17,7 +17,7 @@
     words.push_back(word);
 }
 
- void SplitThings::split_string(const string& str,vector<string> & strings) { //TODO CHECK STRINGS
+ void SplitThings::split_string(const string& str,vector<string> & strings) {
     string::size_type pos = 0;
     string::size_type prev = 0;
     while ((pos = str.find('\n', prev)) != string::npos) {
@@ -26,4 +26,13 @@
     }
     // To get the last substring (or only, if delimiter is not found)
     strings.push_back(str.substr(prev));
+}
+
+string SplitThings::getBookName(int start, int end, vector<string> &words) {
+    string name = "";
+    for(int i=start;i<=end;i++){
+        name+=words[i]+" ";
+    }
+    name= name.substr(0,name.length()-1);
+    return name;
 }

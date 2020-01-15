@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <atomic>
 #include "Book.h"
 #include "RequestBorrow.h"
 #include "RequestSubUnsub.h"
@@ -21,6 +22,11 @@ private:
     vector<RequestSubUnsub*>* openSubUnSubReq;
     int runningID;
     int logOutID;
+    std::atomic<int> totalUnSub;
+public:
+    int getTotalUnSub() const;
+
+private:
     string name;
     string password;
     bool isLoggedOut;
@@ -38,7 +44,10 @@ public:
     void setLogOutId(int logOutId);
     void setIsLoggedOut(bool isLoggedOut);
     void insertSubUnsubReq(RequestSubUnsub* req);
+    void getAllTopics(vector<string>& topics);
     void clean();
+    void increaseUnSub();
+    bool checkIfDone(int total);
     int getRunningID();
     int getLogOutId() const;
     int getSubscribeIDbyTopic(string genre);
