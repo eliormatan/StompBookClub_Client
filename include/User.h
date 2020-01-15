@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include <atomic>
+#include <mutex>
 #include "Book.h"
 #include "RequestBorrow.h"
 #include "RequestSubUnsub.h"
@@ -26,6 +27,8 @@ private:
     string password;
     bool isLoggedOut;
     std::atomic<unsigned int> totalUnSub;
+    mutex subscribeByIdMutex;
+    mutex openReqMutex;
 
 public:
     User(string name,string password);

@@ -119,7 +119,6 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
     } else if (currWord == "add") {
         string genre = words[1];
         string bookName = SplitThings::getBookName(2, words.size() - 1, words);
-//        string bookName = words[2];
         user.addBookToInventory(bookName, genre, user.getName());
         stomp = "SEND" + string("\n") +
                 "destination:" + genre + string("\n") + string("\n") +
@@ -127,7 +126,6 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
     } else if (currWord == "borrow") {
         string genre = words[1];
         string bookName = SplitThings::getBookName(2, words.size() - 1, words);
-//        string bookName = words[2];
         stomp = "SEND" + string("\n") +
                 "destination:" + genre + string("\n") + string("\n") +
                 user.getName() + " wish to borrow " + bookName + string("\n") + "\0";
@@ -136,7 +134,6 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
     } else if (currWord == "return") {
         string genre = words[1];
         string bookName = SplitThings::getBookName(2, words.size() - 1, words);
-//        string bookName = words[2];
         string bookLender = user.removeBookFromInventory(genre,
                                                          bookName);    //remove book returns the name of the lender
         if (bookLender == "BookError") {

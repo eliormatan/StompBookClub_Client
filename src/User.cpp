@@ -10,7 +10,8 @@ User::User(string _name, string _password) : bookMap(new map<string, vector<Book
                                              subscribeByID(new map<string, int>()),
                                              openRequests(new vector<RequestBorrow *>()),
                                              openSubUnSubReq(new vector<RequestSubUnsub *>()), runningID(0),
-                                             logOutID(-1), name(_name), password(_password), isLoggedOut(false),totalUnSub(0) {}
+                                             logOutID(-1), name(_name), password(_password), isLoggedOut(false),totalUnSub(0),
+                                             subscribeByIdMutex(),openReqMutex(){}
 
 User &User::operator=(const User &other) { //Copy Operator
     if (this != &other) {
@@ -95,6 +96,7 @@ void User::removeAllSubscribe() {
 }
 
 void User::subscribeWithID(string genre, int subscribeID) {
+    std::lock_guard<std::mutex> lock(subscribeByIdMutex);
     subscribeByID->insert(pair<string, int>(genre, subscribeID));
 }
 
@@ -143,10 +145,12 @@ bool User::findBook(string genre, string bookName) {
 
 
 void User::addRequest(RequestBorrow *requests) {
+    std::lock_guard<std::mutex> lock(openReqMutex);
     openRequests->push_back(requests);
 }
 
 bool User::removeRequest(string bookName, string genre, int subscribeID) {
+    std::lock_guard<std::mutex> lock(openReqMutex);
     for (auto req:*openRequests) {
         if (bookName == req->getBookName() && genre == req->getGenre()) {
             openRequests->erase(std::find(openRequests->begin(), openRequests->end(), req));
@@ -158,6 +162,7 @@ bool User::removeRequest(string bookName, string genre, int subscribeID) {
 }
 
 int User::getSubscribeIDbyTopic(string genre) {
+    std::lock_guard<std::mutex> lock(subscribeByIdMutex);
     return subscribeByID->find(genre)->second;
 }
 
@@ -208,7 +213,8 @@ User::User(const User &other) : bookMap(other.bookMap),
                                 subscribeByID(other.subscribeByID),
                                 openRequests(other.openRequests),
                                 openSubUnSubReq(other.openSubUnSubReq), runningID(other.runningID),
-                                logOutID(other.logOutID), name(other.name), password(other.password), isLoggedOut(other.isLoggedOut),totalUnSub(0) {}
+                                logOutID(other.logOutID), name(other.name), password(other.password), isLoggedOut(other.isLoggedOut),totalUnSub(0),
+                                subscribeByIdMutex(),openReqMutex(){}
 
 void User::copy(const User &other) {
     this->bookMap = other.bookMap;
@@ -224,6 +230,7 @@ void User::copy(const User &other) {
 }
 
 void User::getAllTopics(vector<string> &topics) {
+    std::lock_guard<std::mutex> lock(subscribeByIdMutex);
     for(map<string, int>::iterator it = subscribeByID->begin(); it != subscribeByID->end(); ++it) {
         topics.push_back(it->first);
     }
