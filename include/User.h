@@ -36,6 +36,7 @@ public:
     void addBookToInventory(string bookName,string genre,string borrowedFrom); //
     void removeAllSubscribe();
     void subscribeWithID(string genre,int subscribeID);
+    void unsubWithID(string genre,int unsubID);
     void getAllBooks(string& books,string genre);
     void addRequest(RequestBorrow* requests);
     void setLogOutId(int logOutId);

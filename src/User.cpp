@@ -237,5 +237,15 @@ void User::increaseUnSub() {
     totalUnSub++;
 }
 
+void User::unsubWithID(string genre, int unsubID) {
+    for(map<string,int>::iterator iter=subscribeByID->begin();iter!=subscribeByID->end();iter++){
+        if((genre==iter->first)&(unsubID==iter->second)){
+            subscribeByID->erase(iter);
+            break;
+        }
+    }
+
+}
+
 
 
