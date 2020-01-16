@@ -191,7 +191,7 @@ void StompMsgEncoderDecoder::onUnsub(string genre, int unSubID,int receiptID, st
     stomp = "UNSUBSCRIBE" + string("\n") +
             "id:" + to_string(unSubID) + string("\n")
             +"receipt:"+to_string(receiptID)+ string("\n")+string("\n") + "\0";
-    RequestSubUnsub *req = new RequestSubUnsub(unSubID, -1, genre, "unsub");
+    RequestSubUnsub *req = new RequestSubUnsub(receiptID, -1, genre, "unsub");
     user.unsubWithID(genre,unSubID);
     user.insertSubUnsubReq(req);
 }
