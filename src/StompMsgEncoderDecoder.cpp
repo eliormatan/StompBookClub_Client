@@ -115,7 +115,8 @@ void StompMsgEncoderDecoder::encode(string msg, string &stomp) {
     } else if (currWord == "exit") {
         string genre = words[1];
         int UnSubid = user.getSubscribeIDbyTopic(genre);
-        onUnsub(genre, UnSubid, stomp);
+        int recipetID = user.getRunningID();
+        onUnsub(genre, UnSubid,recipetID, stomp);
     } else if (currWord == "add") {
         string genre = words[1];
         string bookName = SplitThings::getBookName(2, words.size() - 1, words);
@@ -186,9 +187,10 @@ int StompMsgEncoderDecoder::findIndexOfWord(vector<string> &words, string word) 
     return -1;
 }
 
-void StompMsgEncoderDecoder::onUnsub(string genre, int unSubID, string &stomp) {
+void StompMsgEncoderDecoder::onUnsub(string genre, int unSubID,int receiptID, string &stomp) {
     stomp = "UNSUBSCRIBE" + string("\n") +
-            "id:" + to_string(unSubID) + string("\n") + string("\n") + "\0";
+            "id:" + to_string(unSubID) + string("\n")
+            +"receipt:"+to_string(receiptID)+ string("\n")+string("\n") + "\0";
     RequestSubUnsub *req = new RequestSubUnsub(unSubID, -1, genre, "unsub");
     user.unsubWithID(genre,unSubID);
     user.insertSubUnsubReq(req);
